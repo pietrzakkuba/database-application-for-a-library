@@ -1,0 +1,28 @@
+.root {
+    -fx-background-color: #232323;
+}
+.button {
+    -fx-text-fill: #232323;
+    -fx-background-color: #32CD32;
+    -fx-font-size: 1.5em;
+}
+.button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #21BC21;
+}
+.our-library-button {
+    -fx-font-size: 3.0em;
+    -fx-text-fill: #21BC21;
+}
+.log-out-button {
+    -fx-background-color: #D0D217;
+}
+.log-out-button:hover {
+    -fx-background-color: #BFC106;
+}
+.exit-button {
+    -fx-background-color: #991111;
+}
+.exit-button:hover {
+    -fx-background-color: #7F0000;
+ }
