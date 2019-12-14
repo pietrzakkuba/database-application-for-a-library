@@ -1,28 +1,32 @@
 .root {
-    -fx-background-color: #232323;
+    -fx-background-color: #F5F5F5;
 }
 .button {
     -fx-text-fill: #232323;
-    -fx-background-color: #32CD32;
+    -fx-background-color: #11EE11;
     -fx-font-size: 1.5em;
 }
 .button:hover {
     -fx-cursor: hand;
-    -fx-background-color: #21BC21;
+    -fx-background-color: #11DD11;
 }
-.our-library-button {
+.our-library-label {
     -fx-font-size: 3.0em;
-    -fx-text-fill: #21BC21;
+    -fx-text-fill: #11EE11;
 }
-.log-out-button {
-    -fx-background-color: #D0D217;
+.back-button {
+    -fx-background-color: #EEEE11;
 }
-.log-out-button:hover {
-    -fx-background-color: #BFC106;
+.back-button:hover {
+    -fx-background-color: #DDDD11;
 }
 .exit-button {
-    -fx-background-color: #991111;
+    -fx-background-color: #EE1111;
 }
 .exit-button:hover {
-    -fx-background-color: #7F0000;
+    -fx-background-color: #DD1111;
  }
+.search-box-label {
+    -fx-font-size: 1.5em;
+    -fx-background-color: #11EE11;
+}
