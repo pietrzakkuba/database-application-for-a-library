@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:controller="fxapp.OrdersController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.OrdersController">
     <children>
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" prefHeight="17.0" prefWidth="954.0" styleClass="our-library-label" text="Orders" />
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" prefHeight="17.0" prefWidth="954.0" styleClass="our-library-label" text="Shifts" />
         <Button fx:id="toMainMenuButton" layoutX="832.0" layoutY="553.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="35.0" prefWidth="94.0" text="Back">
             <styleClass>
                 <String fx:value="back-button" />
@@ -22,10 +22,12 @@
         <TableView layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
                 <TableColumn prefWidth="59.0" text="ID" />
-                <TableColumn prefWidth="129.0" text="Date" />
-                <TableColumn prefWidth="169.0" text="First name" />
-                <TableColumn prefWidth="209.0" text="Second name" />
-                <TableColumn prefWidth="279.0" text="Book's title" />
+                <TableColumn prefWidth="129.0" text="Schedule" />
+                <TableColumn prefWidth="109.0" text="Time - from" />
+                <TableColumn prefWidth="95.0" text="Time - to" />
+                <TableColumn prefWidth="185.0" text="Employee - first name" />
+            <TableColumn prefWidth="133.0" text="Employee - last name" />
+            <TableColumn prefWidth="111.0" text="Shift's length" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

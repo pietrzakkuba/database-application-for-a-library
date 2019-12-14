@@ -12,7 +12,6 @@ public class MainMenuController {
     public Button ordersButton;
     public Button booksButton;
     public Button authorsButton;
-    public Button departmentsButton;
     public Button readersButton;
     public Button checkOutsButton;
     public Button copiesButton;
@@ -21,6 +20,7 @@ public class MainMenuController {
     public Button shiftScheduleButton;
     public Button shiftsButton;
     public Button employeesButton;
+    public Button sectionsButton;
 
     public void toOrders(ActionEvent actionEvent) {
         Platform.runLater( () -> {
@@ -82,10 +82,10 @@ public class MainMenuController {
         });
     }
 
-    public void toDepartments(ActionEvent actionEvent) {
+    public void toSections(ActionEvent actionEvent) {
         Platform.runLater( () -> {
             try {
-                Main.getMainStage().setScene(new Scene(FXMLLoader.load(getClass().getResource("departments.fxml"))));
+                Main.getMainStage().setScene(new Scene(FXMLLoader.load(getClass().getResource("sections.fxml"))));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -145,4 +145,5 @@ public class MainMenuController {
     public void exit(ActionEvent actionEvent) {
         Main.getMainStage().close();
     }
+
 }
