@@ -4,6 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sql.DatabaseConnection;
+
+import java.sql.SQLException;
 
 public class Main extends Application {
 
@@ -23,6 +26,13 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        try {
+            DatabaseConnection.connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         launch(args);
     }
 }
