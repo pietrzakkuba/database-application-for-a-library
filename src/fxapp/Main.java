@@ -28,9 +28,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         try {
             DatabaseConnection.connect();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         launch(args);

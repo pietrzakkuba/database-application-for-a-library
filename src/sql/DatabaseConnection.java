@@ -16,5 +16,14 @@ public class DatabaseConnection {
                     "inf136729",
                     "inf136729"
             );
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM AUTORZY");
+            while (resultSet.next()) {
+                for (int i = 1; i <=resultSet.getMetaData().getColumnCount(); i++){
+                    System.out.print(resultSet.getString(i) + '\t');
+                }
+                System.out.print('\n');
+            }
+
     }
 }
