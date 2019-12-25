@@ -11,15 +11,14 @@ public class AuthorsTable {
     private Date date_of_birth;
     private Date date_of_death;
 
-
-    public AuthorsTable(String first_name, String last_name, String nationality, String pseudonym, Date date_of_birth, Date date_of_death, int id) {
+    public AuthorsTable(int id, String first_name, String last_name, String nationality, String pseudonym, Date date_of_birth, Date date_of_death) {
+        this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.nationality = nationality;
         this.pseudonym = pseudonym;
         this.date_of_birth = date_of_birth;
         this.date_of_death = date_of_death;
-        this.id = id;
     }
 
     public int getId() {

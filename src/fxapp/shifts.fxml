@@ -21,13 +21,12 @@
             </styleClass></Button>
         <TableView layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
-                <TableColumn prefWidth="59.0" text="ID" />
                 <TableColumn prefWidth="129.0" text="Schedule" />
                 <TableColumn prefWidth="109.0" text="Time - from" />
                 <TableColumn prefWidth="95.0" text="Time - to" />
                 <TableColumn prefWidth="185.0" text="Employee - first name" />
-            <TableColumn prefWidth="133.0" text="Employee - last name" />
-            <TableColumn prefWidth="111.0" text="Shift's length" />
+                <TableColumn prefWidth="133.0" text="Employee - last name" />
+                <TableColumn prefWidth="111.0" text="Shift's length" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">
