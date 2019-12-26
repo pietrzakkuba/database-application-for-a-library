@@ -6,7 +6,7 @@ public class SectionsTable {
     private String name;
     private String short_name;
 
-    public SectionsTable(int section_id, int affiliate_id, String name, String short_name) {
+    public SectionsTable(String name, String short_name, int section_id, int affiliate_id) {
         this.section_id = section_id;
         this.affiliate_id = affiliate_id;
         this.name = name;

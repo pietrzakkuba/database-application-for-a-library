@@ -7,7 +7,7 @@ public class OrdersTable {
     private int reader_id;
     private Date order_date;
 
-    public OrdersTable(int id, int reader_id, Date order_date) {
+    public OrdersTable(Date order_date, int id, int reader_id) {
         this.id = id;
         this.reader_id = reader_id;
         this.order_date = order_date;

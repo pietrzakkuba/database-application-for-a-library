@@ -12,7 +12,7 @@ public class EmployeesTable {
     private double hourly_rate;
     private Date date_of_contract_expiration;
 
-    public EmployeesTable(int id, String position, String first_name, String last_name, Date date_of_employment, Date date_of_signing_cotract, double hourly_rate, Date date_of_contract_expiration) {
+    public EmployeesTable(String first_name, String last_name, Date date_of_employment, Date date_of_signing_cotract, Date date_of_contract_expiration, double hourly_rate, int id, String position) {
         this.id = id;
         this.position = position;
         this.first_name = first_name;

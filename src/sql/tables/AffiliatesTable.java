@@ -6,6 +6,13 @@ public class AffiliatesTable {
     private int opening_hours_from;
     private int opening_hours_to;
 
+    public AffiliatesTable(int number, String address, int opening_hours_from, int opening_hours_to) {
+        this.number = number;
+        this.address = address;
+        this.opening_hours_from = opening_hours_from;
+        this.opening_hours_to = opening_hours_to;
+    }
+
     public int getNumber() {
         return number;
     }
@@ -35,13 +42,6 @@ public class AffiliatesTable {
     }
 
     public void setOpening_hours_to(int opening_hours_to) {
-        this.opening_hours_to = opening_hours_to;
-    }
-
-    public AffiliatesTable(int number, String address, int opening_hours_from, int opening_hours_to) {
-        this.number = number;
-        this.address = address;
-        this.opening_hours_from = opening_hours_from;
         this.opening_hours_to = opening_hours_to;
     }
 }

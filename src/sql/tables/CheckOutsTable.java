@@ -7,9 +7,9 @@ public class CheckOutsTable {
     private int reader_id;
     private Date check_out_date;
     private int check_out_period;
-    private int return_date;
+    private Date return_date;
 
-    public CheckOutsTable(int checkout_id, int reader_id, Date check_out_date, int check_out_period, int return_date) {
+    public CheckOutsTable(Date check_out_date, int check_out_period, Date return_date, int checkout_id, int reader_id) {
         this.checkout_id = checkout_id;
         this.reader_id = reader_id;
         this.check_out_date = check_out_date;
@@ -49,11 +49,11 @@ public class CheckOutsTable {
         this.check_out_period = check_out_period;
     }
 
-    public int getReturn_date() {
+    public Date getReturn_date() {
         return return_date;
     }
 
-    public void setReturn_date(int return_date) {
+    public void setReturn_date(Date return_date) {
         this.return_date = return_date;
     }
 }

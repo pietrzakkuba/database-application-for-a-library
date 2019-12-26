@@ -10,7 +10,7 @@ public class ShiftScheduleTable {
     private Date valid_from;
     private Date valid_to;
 
-    public ShiftScheduleTable(int id, boolean is_valid, int affiliate_number, String name, Date valid_from, Date valid_to) {
+    public ShiftScheduleTable(boolean is_valid, int id, String name, Date valid_from, Date valid_to, int affiliate_number) {
         this.id = id;
         this.is_valid = is_valid;
         this.affiliate_number = affiliate_number;

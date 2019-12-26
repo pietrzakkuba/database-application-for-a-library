@@ -11,7 +11,7 @@ public class CopiesTable {
     private Date release_year;
     private int release_number;
 
-    public CopiesTable(int copy_id, int section_id, int book_id, boolean availability, String type_of_cover, Date release_year, int release_number) {
+    public CopiesTable(int copy_id, boolean availability, int release_number, Date release_year, String type_of_cover, int book_id, int section_id) {
         this.copy_id = copy_id;
         this.section_id = section_id;
         this.book_id = book_id;

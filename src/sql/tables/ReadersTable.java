@@ -9,7 +9,7 @@ public class ReadersTable {
     private Date date_of_signing_in;
     private Date year_of_birth;
 
-    public ReadersTable(int id, String first_name, String last_name, Date date_of_signing_in, Date year_of_birth) {
+    public ReadersTable(String first_name, String last_name, Date year_of_birth, Date date_of_signing_in, int id) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
