@@ -19,8 +19,9 @@
                 <String fx:value="back-button" />
                 <String fx:value="back-button" />
             </styleClass></Button>
-        <TableView layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
-            <columns>
+        <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
+
+        <columns>
                 <TableColumn prefWidth="189.0" text="Name" />
                 <TableColumn prefWidth="129.0" text="Minimal hourly rate" />
                 <TableColumn prefWidth="145.0" text="Number of employees" />

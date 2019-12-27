@@ -2,15 +2,17 @@ package sql.tables;
 
 public class SectionsTable {
     private int section_id;
-    private int affiliate_id;
-    private String name;
-    private String short_name;
+    private String section_name;
+    private String section_short_name;
+    private int number_of_books;
+    private String affiliate_name;
 
-    public SectionsTable(String name, String short_name, int section_id, int affiliate_id) {
+    public SectionsTable(int section_id, String section_name, String section_short_name, int number_of_books, String affiliate_name) {
         this.section_id = section_id;
-        this.affiliate_id = affiliate_id;
-        this.name = name;
-        this.short_name = short_name;
+        this.section_name = section_name;
+        this.section_short_name = section_short_name;
+        this.number_of_books = number_of_books;
+        this.affiliate_name = affiliate_name;
     }
 
     public int getSection_id() {
@@ -21,27 +23,35 @@ public class SectionsTable {
         this.section_id = section_id;
     }
 
-    public int getAffiliate_id() {
-        return affiliate_id;
+    public String getSection_name() {
+        return section_name;
     }
 
-    public void setAffiliate_id(int affiliate_id) {
-        this.affiliate_id = affiliate_id;
+    public void setSection_name(String section_name) {
+        this.section_name = section_name;
     }
 
-    public String getName() {
-        return name;
+    public String getSection_short_name() {
+        return section_short_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSection_short_name(String section_short_name) {
+        this.section_short_name = section_short_name;
     }
 
-    public String getShort_name() {
-        return short_name;
+    public int getNumber_of_books() {
+        return number_of_books;
     }
 
-    public void setShort_name(String short_name) {
-        this.short_name = short_name;
+    public void setNumber_of_books(int number_of_books) {
+        this.number_of_books = number_of_books;
+    }
+
+    public String getAffiliate_name() {
+        return affiliate_name;
+    }
+
+    public void setAffiliate_name(String affiliate_name) {
+        this.affiliate_name = affiliate_name;
     }
 }

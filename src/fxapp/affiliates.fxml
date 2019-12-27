@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.AffiliatesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.AffiliatesController">
     <children>
         <Label alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" prefHeight="17.0" prefWidth="954.0" styleClass="our-library-label" text="Affiliates" />
         <Button fx:id="toMainMenuButton" layoutX="832.0" layoutY="553.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="35.0" prefWidth="94.0" text="Back">
@@ -19,13 +12,13 @@
                 <String fx:value="back-button" />
                 <String fx:value="back-button" />
             </styleClass></Button>
-        <TableView layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
+        <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
-                <TableColumn prefWidth="59.0" text="ID" />
-                <TableColumn prefWidth="129.0" text="Number" />
-                <TableColumn prefWidth="169.0" text="Address" />
-                <TableColumn prefWidth="217.0" text="Opening hours" />
-            <TableColumn prefWidth="149.0" text="Number of employees" />
+                <TableColumn prefWidth="78.0" text="Number" />
+                <TableColumn prefWidth="429.0" text="Address" />
+                <TableColumn prefWidth="118.0" text="Open from" />
+                <TableColumn prefWidth="85.0" text="Open till" />
+            <TableColumn prefWidth="136.0" text="Number of employees" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

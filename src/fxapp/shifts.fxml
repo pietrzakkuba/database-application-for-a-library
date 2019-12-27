@@ -19,8 +19,8 @@
                 <String fx:value="back-button" />
                 <String fx:value="back-button" />
             </styleClass></Button>
-        <TableView layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
-            <columns>
+        <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
+        <columns>
                 <TableColumn prefWidth="129.0" text="Schedule" />
                 <TableColumn prefWidth="109.0" text="Time - from" />
                 <TableColumn prefWidth="95.0" text="Time - to" />

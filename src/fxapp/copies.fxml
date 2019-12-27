@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.CopiesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.CopiesController">
     <children>
         <Label alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" prefHeight="17.0" prefWidth="954.0" styleClass="our-library-label" text="Copies" />
         <Button fx:id="toMainMenuButton" layoutX="832.0" layoutY="553.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="35.0" prefWidth="94.0" text="Back">
@@ -19,17 +12,16 @@
                 <String fx:value="back-button" />
                 <String fx:value="back-button" />
             </styleClass></Button>
-        <TableView layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
+        <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
-                <TableColumn prefWidth="59.0" text="ID" />
-                <TableColumn prefWidth="117.0" text="Book's title" />
-                <TableColumn prefWidth="117.0" text="Number of a copy" />
-                <TableColumn prefWidth="87.0" text="Availability" />
-                <TableColumn prefWidth="101.0" text="Section" />
-                <TableColumn prefWidth="75.0" text="Affiliate" />
-                <TableColumn prefWidth="109.0" text="Release number" />
-            <TableColumn prefWidth="93.0" text="Release year" />
-            <TableColumn prefWidth="97.0" text="Type of a cover" />
+                <TableColumn prefWidth="50.0" text="ID" />
+                <TableColumn prefWidth="201.0" text="Book's title" />
+                <TableColumn prefWidth="90.0" text="Availability" />
+                <TableColumn prefWidth="65.0" text="Section" />
+                <TableColumn prefWidth="157.0" text="Affiliate" />
+                <TableColumn prefWidth="111.0" text="Release number" />
+            <TableColumn prefWidth="100.0" text="Release year" />
+            <TableColumn prefWidth="110.0" text="Type of a cover" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

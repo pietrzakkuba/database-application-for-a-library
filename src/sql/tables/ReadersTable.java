@@ -6,15 +6,17 @@ public class ReadersTable {
     private int id;
     private String first_name;
     private String last_name;
-    private Date date_of_signing_in;
     private Date year_of_birth;
+    private Date date_of_signing_in;
+    private int number_of_borrowed_books;
 
-    public ReadersTable(String first_name, String last_name, Date year_of_birth, Date date_of_signing_in, int id) {
+    public ReadersTable(int id, String first_name, String last_name, Date year_of_birth, Date date_of_signing_in, int number_of_borrowed_books) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
-        this.date_of_signing_in = date_of_signing_in;
         this.year_of_birth = year_of_birth;
+        this.date_of_signing_in = date_of_signing_in;
+        this.number_of_borrowed_books = number_of_borrowed_books;
     }
 
     public int getId() {
@@ -41,6 +43,14 @@ public class ReadersTable {
         this.last_name = last_name;
     }
 
+    public Date getYear_of_birth() {
+        return year_of_birth;
+    }
+
+    public void setYear_of_birth(Date year_of_birth) {
+        this.year_of_birth = year_of_birth;
+    }
+
     public Date getDate_of_signing_in() {
         return date_of_signing_in;
     }
@@ -49,11 +59,12 @@ public class ReadersTable {
         this.date_of_signing_in = date_of_signing_in;
     }
 
-    public Date getYear_of_birth() {
-        return year_of_birth;
+    public int getNumber_of_borrowed_books() {
+        return number_of_borrowed_books;
     }
 
-    public void setYear_of_birth(Date year_of_birth) {
-        this.year_of_birth = year_of_birth;
+    public void setNumber_of_borrowed_books(int number_of_borrowed_books) {
+        this.number_of_borrowed_books = number_of_borrowed_books;
     }
 }
+

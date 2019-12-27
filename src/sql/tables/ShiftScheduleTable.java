@@ -5,18 +5,20 @@ import java.sql.Date;
 public class ShiftScheduleTable {
     private int id;
     private boolean is_valid;
-    private int affiliate_number;
-    private String name;
+    private String affiliate_name;
+    private String schedule_name;
     private Date valid_from;
     private Date valid_to;
+    private int number_of_shifts;
 
-    public ShiftScheduleTable(boolean is_valid, int id, String name, Date valid_from, Date valid_to, int affiliate_number) {
+    public ShiftScheduleTable(int id, boolean is_valid, String affiliate_name, String schedule_name, Date valid_from, Date valid_to, int number_of_shifts) {
         this.id = id;
         this.is_valid = is_valid;
-        this.affiliate_number = affiliate_number;
-        this.name = name;
+        this.affiliate_name = affiliate_name;
+        this.schedule_name = schedule_name;
         this.valid_from = valid_from;
         this.valid_to = valid_to;
+        this.number_of_shifts = number_of_shifts;
     }
 
     public int getId() {
@@ -35,20 +37,20 @@ public class ShiftScheduleTable {
         this.is_valid = is_valid;
     }
 
-    public int getAffiliate_number() {
-        return affiliate_number;
+    public String getAffiliate_name() {
+        return affiliate_name;
     }
 
-    public void setAffiliate_number(int affiliate_number) {
-        this.affiliate_number = affiliate_number;
+    public void setAffiliate_name(String affiliate_name) {
+        this.affiliate_name = affiliate_name;
     }
 
-    public String getName() {
-        return name;
+    public String getSchedule_name() {
+        return schedule_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSchedule_name(String schedule_name) {
+        this.schedule_name = schedule_name;
     }
 
     public Date getValid_from() {
@@ -65,5 +67,13 @@ public class ShiftScheduleTable {
 
     public void setValid_to(Date valid_to) {
         this.valid_to = valid_to;
+    }
+
+    public int getNumber_of_shifts() {
+        return number_of_shifts;
+    }
+
+    public void setNumber_of_shifts(int number_of_shifts) {
+        this.number_of_shifts = number_of_shifts;
     }
 }

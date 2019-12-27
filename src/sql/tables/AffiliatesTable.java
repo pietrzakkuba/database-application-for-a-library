@@ -1,24 +1,26 @@
 package sql.tables;
 
 public class AffiliatesTable {
-    private int number;
+    private int id_number;
     private String address;
     private int opening_hours_from;
     private int opening_hours_to;
+    private int number_of_employees;
 
-    public AffiliatesTable(int number, String address, int opening_hours_from, int opening_hours_to) {
-        this.number = number;
+    public AffiliatesTable(int id_number, String address, int opening_hours_from, int opening_hours_to, int number_of_employees) {
+        this.id_number = id_number;
         this.address = address;
         this.opening_hours_from = opening_hours_from;
         this.opening_hours_to = opening_hours_to;
+        this.number_of_employees = number_of_employees;
     }
 
-    public int getNumber() {
-        return number;
+    public int getId_number() {
+        return id_number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setId_number(int id_number) {
+        this.id_number = id_number;
     }
 
     public String getAddress() {
@@ -43,5 +45,13 @@ public class AffiliatesTable {
 
     public void setOpening_hours_to(int opening_hours_to) {
         this.opening_hours_to = opening_hours_to;
+    }
+
+    public int getNumber_of_employees() {
+        return number_of_employees;
+    }
+
+    public void setNumber_of_employees(int number_of_employees) {
+        this.number_of_employees = number_of_employees;
     }
 }

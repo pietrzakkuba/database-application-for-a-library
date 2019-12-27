@@ -6,19 +6,19 @@ public class AuthorsTable {
     private int id;
     private String first_name;
     private String last_name;
-    private String nationality;
     private String pseudonym;
     private Date date_of_birth;
     private Date date_of_death;
+    private String nationality;
 
-    public AuthorsTable(String first_name, String last_name, String pseudonym, Date date_of_birth, Date date_of_death, String nationality, int id) {
+    public AuthorsTable(int id, String first_name, String last_name, String pseudonym, Date date_of_birth, Date date_of_death, String nationality) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
-        this.nationality = nationality;
         this.pseudonym = pseudonym;
         this.date_of_birth = date_of_birth;
         this.date_of_death = date_of_death;
+        this.nationality = nationality;
     }
 
     public int getId() {
@@ -45,14 +45,6 @@ public class AuthorsTable {
         this.last_name = last_name;
     }
 
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
-
     public String getPseudonym() {
         return pseudonym;
     }
@@ -75,6 +67,14 @@ public class AuthorsTable {
 
     public void setDate_of_death(Date date_of_death) {
         this.date_of_death = date_of_death;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 }
 
