@@ -83,26 +83,35 @@ public class DatabaseConnection {
     }
 
     public static void loadEverything() throws SQLException {
-        loadAffiliates();
-        loadAuthors();
-        loadBooks();
-        loadCheckOuts();
-        loadCopies();
-        loadEmployees();
-        loadOrders();
-        loadPositions();
-        loadReaders();
-        loadSections();
-        loadShiftSchedule();
-        loadShifts();
+//        loadAffiliates();
+//        loadAuthors();
+//        loadBooks();
+//        loadCheckOuts();
+//        loadCopies();
+//        loadEmployees();
+//        loadOrders();
+//        loadPositions();
+//        loadReaders();
+//        loadSections();
+//        loadShiftSchedule();
+//        loadShifts();
     }
 
     public static void loadAffiliates() throws SQLException {
         if (affiliatesTableArrayList.size() > 0) {
             affiliatesTableArrayList.clear();
         }
+        String query =  "select numer, adres, godziny_pracy_od, godziny_pracy_do, count(distinct j.id_pracownika) " +
+                        "from filie " +
+                        "inner join grafik_dyzurow g " +
+                        "on numer = g.numer_filii " +
+                        "inner join jednostka_pracy j " +
+                        "on g.id = j.id_grafiku " +
+                        "left join pracownicy p " +
+                        "on p.id = j.id_pracownika " +
+                        "group by(numer, adres, godziny_pracy_od, godziny_pracy_do)";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             affiliatesTableArrayList.add(
                     new AffiliatesTable(
@@ -119,8 +128,10 @@ public class DatabaseConnection {
         if (authorsTableArrayList.size() > 0) {
             authorsTableArrayList.clear();
         }
+        String query =  "select id, imie, nazwisko, pseudonim, data_urodzin, data_smierci, narodowosc " +
+                        "from autorzy";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             authorsTableArrayList.add(
                     new AuthorsTable(
@@ -139,8 +150,9 @@ public class DatabaseConnection {
         if (booksTableArrayList.size() > 0) {
             booksTableArrayList.clear();
         }
+        String query =  "";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             booksTableArrayList.add(
                     new BooksTable(
