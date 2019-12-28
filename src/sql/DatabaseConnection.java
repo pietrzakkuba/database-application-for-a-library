@@ -83,18 +83,18 @@ public class DatabaseConnection {
     }
 
     public static void loadEverything() throws SQLException {
-//        loadAffiliates();
-//        loadAuthors();
-//        loadBooks();
-//        loadCheckOuts();
-//        loadCopies();
-//        loadEmployees();
-//        loadOrders();
-//        loadPositions();
-//        loadReaders();
-//        loadSections();
-//        loadShiftSchedule();
-//        loadShifts();
+        loadAffiliates();
+        loadAuthors();
+        loadBooks();
+        loadCheckOuts();
+        loadCopies();
+        loadEmployees();
+        loadOrders();
+        loadPositions();
+        loadReaders();
+        loadSections();
+        loadShiftSchedule();
+        loadShifts();
     }
 
     public static void loadAffiliates() throws SQLException {
@@ -150,7 +150,17 @@ public class DatabaseConnection {
         if (booksTableArrayList.size() > 0) {
             booksTableArrayList.clear();
         }
-        String query =  "";
+        String query =  "select k.id, k.tytul, a.imie, a.nazwisko, count(e.numer), count(z.id_zamowienia) " +
+                        "from ksiazki k " +
+                        "inner join wspolautorzy w " +
+                        "on w.id_ksiazki = k.id " +
+                        "inner join autorzy a " +
+                        "on a.id = w.id_autora " +
+                        "left join egzemplarze e " +
+                        "on e.id_ksiazki = k.id " +
+                        "left join pozycja_zamowienia z " +
+                        "on z.id_ksiazki = k.id " +
+                        "group by(k.id, k.tytul, a.imie, a.nazwisko)";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
@@ -170,8 +180,18 @@ public class DatabaseConnection {
         if (checkOutsTableArrayList.size() > 0) {
             checkOutsTableArrayList.clear();
         }
+        String query =  "select w.id_wypozyczenia, c.imie, c.nazwisko, k.tytul, e.numer, w.data_wypozyczenia, w.termin_zwrotu, w.data_zwrotu " +
+                        "from wypozyczenia w " +
+                        "inner join czytelnicy c " +
+                        "on c.id = w.id_czytelnika " +
+                        "inner join pozycja_wypozyczenia pw " +
+                        "on pw.id_egzemplarza = w.id_wypozyczenia " +
+                        "inner join egzemplarze e " +
+                        "on e.numer = pw.id_egzemplarza " +
+                        "inner join ksiazki k " +
+                        "on e.id_ksiazki = k.id";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             checkOutsTableArrayList.add(
                     new CheckOutsTable(
@@ -191,8 +211,16 @@ public class DatabaseConnection {
         if (copiesTableArrayList.size() > 0) {
             copiesTableArrayList.clear();
         }
+        String query =  "select e.numer, k.tytul, e.dostepnosc, d.nazwa, f.adres, e.wydanie, e.rok_wydania, e.rodzaj_okladki " +
+                        "from egzemplarze e " +
+                        "inner join ksiazki k " +
+                        "on e.id_ksiazki = k.id " +
+                        "inner join dzialy d " +
+                        "on e.id_dzialu = d.id " +
+                        "inner join filie f " +
+                        "on f.numer = d.numer_filii";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             copiesTableArrayList.add(
                     new CopiesTable(
@@ -212,8 +240,16 @@ public class DatabaseConnection {
         if (employeesTableArrayList.size() > 0) {
             employeesTableArrayList.clear();
         }
+        String query =  "select p.id, p.imie, p.nazwisko, p.stanowisko, f.adres, p.data_zatrudnienia, p.data_podpisania_ostatniej_umowy, p.data_wygasniecia_umowy, p.stawka_godzinowa " +
+                        "from pracownicy p " +
+                        "inner join jednostka_pracy jp " +
+                        "on jp.id_pracownika = p.id " +
+                        "inner join grafik_dyzurow gd " +
+                        "on gd.id = jp.id_grafiku " +
+                        "inner join filie f " +
+                        "on f.numer = gd.numer_filii";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             employeesTableArrayList.add(
                     new EmployeesTable(
@@ -234,8 +270,16 @@ public class DatabaseConnection {
         if (ordersTableArrayList.size() > 0) {
             ordersTableArrayList.clear();
         }
+        String query =  "select z.id, z.data_zamowienia, c.imie, c.nazwisko, k.tytul " +
+                        "from zamowienia z " +
+                        "inner join czytelnicy c " +
+                        "on c.id = z.id_czytelnika " +
+                        "inner join pozycja_zamowienia pz " +
+                        "on pz.id_zamowienia = z.id " +
+                        "inner join ksiazki k " +
+                        "on k.id = pz.id_ksiazki";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             ordersTableArrayList.add(
                     new OrdersTable(
@@ -252,8 +296,13 @@ public class DatabaseConnection {
         if (positionsTableArrayList.size() > 0) {
             positionsTableArrayList.clear();
         }
+        String query =  "select s.nazwa, s.minimalna_stawka_godzinowa, count(p.id) " +
+                        "from stanowiska s " +
+                        "left join pracownicy p " +
+                        "on p.stanowisko = s.nazwa " +
+                        "group by(s.nazwa, s.minimalna_stawka_godzinowa)";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             positionsTableArrayList.add(
                     new PositionsTable(
@@ -268,8 +317,13 @@ public class DatabaseConnection {
         if (readersTableArrayList.size() > 0) {
             readersTableArrayList.clear();
         }
+        String query =  "select id, imie, nazwisko, data_urodzenia, data_zapisania, count(w.id_wypozyczenia) " +
+                        "from czytelnicy " +
+                        "left join wypozyczenia w " +
+                        "on w.id_czytelnika = id " +
+                        "group by(id, imie, nazwisko, data_urodzenia, data_zapisania)";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             readersTableArrayList.add(
                     new ReadersTable(
@@ -287,8 +341,15 @@ public class DatabaseConnection {
         if (sectionsTableArrayList.size() > 0) {
             sectionsTableArrayList.clear();
         }
+        String query =  "select d.id, d.nazwa, d.skrot, count(e.numer), f.adres " +
+                        "from dzialy d " +
+                        "inner join filie f " +
+                        "on f.numer = d.numer_filii " +
+                        "left join egzemplarze e " +
+                        "on e.id_dzialu = d.id " +
+                        "group by(d.id, d.nazwa, d.skrot, f.adres)";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             sectionsTableArrayList.add(
                     new SectionsTable(
@@ -305,8 +366,15 @@ public class DatabaseConnection {
         if (shiftScheduleTableArrayList.size() > 0) {
             shiftScheduleTableArrayList.clear();
         }
+        String query =  "select gd.id, gd.czy_obowiazuje, f.adres, gd.nazwa, gd.obowiazuje_od, gd.obowiazuje_do, count(jp.id_grafiku) " +
+                        "from grafik_dyzurow gd " +
+                        "inner join filie f " +
+                        "on gd.numer_filii = f.numer " +
+                        "left join jednostka_pracy jp " +
+                        "on gd.id = jp.id_grafiku " +
+                        "group by(gd.id, gd.czy_obowiazuje, f.adres, gd.nazwa, gd.obowiazuje_od, gd.obowiazuje_do)";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             shiftScheduleTableArrayList.add(
                     new ShiftScheduleTable(
@@ -325,8 +393,14 @@ public class DatabaseConnection {
         if (shiftsTableArrayList.size() > 0) {
             shiftsTableArrayList.clear();
         }
+        String query =  "select gd.nazwa, od_godziny, do_godziny, p.imie, p.nazwisko, (do_godziny - od_godziny) " +
+                        "from jednostka_pracy " +
+                        "inner join grafik_dyzurow gd " +
+                        "on jednostka_pracy.id_grafiku = gd.id " +
+                        "inner join pracownicy p " +
+                        "on jednostka_pracy.id_pracownika = p.id";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("");
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             shiftsTableArrayList.add(
                     new ShiftsTable(
