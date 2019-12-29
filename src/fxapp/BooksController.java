@@ -12,12 +12,16 @@ import javafx.scene.control.Button;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
+import sql.tables.AffiliatesTable;
 import sql.tables.BooksTable;
 
 public class BooksController implements Initializable {
@@ -29,12 +33,16 @@ public class BooksController implements Initializable {
     public TableColumn<BooksTable, String> author_last_name;
     public TableColumn<BooksTable, Integer> number_of_copies;
     public TableColumn<BooksTable, Integer> number_of_orders;
+    public TextField filter_text_box;
+
+    private ObservableList<BooksTable> data;
+    private ArrayList<BooksTable> filtered_data = new ArrayList<BooksTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             DatabaseConnection.loadBooks();
-            ObservableList<BooksTable> data = FXCollections.observableArrayList(DatabaseConnection.getBooksTableArrayList());
+            data = FXCollections.observableArrayList(DatabaseConnection.getBooksTableArrayList());
             id.setCellValueFactory(new PropertyValueFactory<BooksTable, Integer>("id"));
             title.setCellValueFactory(new PropertyValueFactory<BooksTable, String>("title"));
             author_first_name.setCellValueFactory(new PropertyValueFactory<BooksTable, String>("author_first_name"));
@@ -55,5 +63,15 @@ public class BooksController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void filtering(KeyEvent onKeyReleased) {
+        filtered_data.clear();
+        for (BooksTable datum : data) {
+            if (datum.getAll().replaceAll("null", "").toLowerCase().contains(filter_text_box.getText().toLowerCase())) {
+                filtered_data.add(datum);
+            }
+        }
+        mainTable.setItems(FXCollections.observableArrayList(filtered_data));
     }
 }

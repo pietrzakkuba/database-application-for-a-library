@@ -3,6 +3,7 @@ package fxapp;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,13 +11,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
 
@@ -28,12 +33,16 @@ public class AffiliatesController implements Initializable {
     public TableColumn<AffiliatesTable, Integer> opening_hours_from;
     public TableColumn<AffiliatesTable, Integer> opening_hours_to;
     public TableColumn<AffiliatesTable, Integer> number_of_employees;
+    public TextField filter_text_box;
+
+    private ObservableList<AffiliatesTable> data;
+    private ArrayList<AffiliatesTable> filtered_data = new ArrayList<AffiliatesTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             DatabaseConnection.loadAffiliates();
-            ObservableList<AffiliatesTable> data = FXCollections.observableArrayList(DatabaseConnection.getAffiliatesTableArrayList());
+            data = FXCollections.observableArrayList(DatabaseConnection.getAffiliatesTableArrayList());
             id_number.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("id_number"));
             address.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, String>("address"));
             opening_hours_from.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("opening_hours_from"));
@@ -43,6 +52,7 @@ public class AffiliatesController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     public void toMainMenu(ActionEvent actionEvent) {
@@ -53,5 +63,15 @@ public class AffiliatesController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void filtering(KeyEvent onKeyReleased) {
+        filtered_data.clear();
+        for (AffiliatesTable datum : data) {
+            if (datum.getAll().replaceAll("null", "").toLowerCase().contains(filter_text_box.getText().toLowerCase())) {
+                filtered_data.add(datum);
+            }
+        }
+        mainTable.setItems(FXCollections.observableArrayList(filtered_data));
     }
 }

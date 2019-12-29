@@ -13,12 +13,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
+import sql.tables.AffiliatesTable;
 import sql.tables.CheckOutsTable;
 
 
@@ -34,11 +38,16 @@ public class CheckOutsController implements Initializable {
     public TableColumn<CheckOutsTable, Integer> check_out_period;
     public TableColumn<CheckOutsTable, Date> return_date;
 
+    public TextField filter_text_box;
+
+    private ObservableList<CheckOutsTable> data;
+    private ArrayList<CheckOutsTable> filtered_data = new ArrayList<CheckOutsTable>();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             DatabaseConnection.loadCheckOuts();
-            ObservableList<CheckOutsTable> data = FXCollections.observableArrayList(DatabaseConnection.getCheckOutsTableArrayList());
+            data = FXCollections.observableArrayList(DatabaseConnection.getCheckOutsTableArrayList());
             checkout_id.setCellValueFactory(new PropertyValueFactory<CheckOutsTable, Integer>("checkout_id"));
             reader_first_name.setCellValueFactory(new PropertyValueFactory<CheckOutsTable, String>("reader_first_name"));
             reader_last_name.setCellValueFactory(new PropertyValueFactory<CheckOutsTable, String>("reader_last_name"));
@@ -61,5 +70,15 @@ public class CheckOutsController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void filtering(KeyEvent onKeyReleased) {
+        filtered_data.clear();
+        for (CheckOutsTable datum : data) {
+            if (datum.getAll().replaceAll("null", "").toLowerCase().contains(filter_text_box.getText().toLowerCase())) {
+                filtered_data.add(datum);
+            }
+        }
+        mainTable.setItems(FXCollections.observableArrayList(filtered_data));
     }
 }

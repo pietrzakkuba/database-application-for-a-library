@@ -23,6 +23,10 @@ public class CheckOutsTable {
         this.return_date = return_date;
     }
 
+    public String getAll() {
+        return String.format("%d %s %s %s %d %s %d %s", this.checkout_id, this.reader_first_name, this.reader_last_name, this.book_title, this.copy_id, this.check_out_date, this.check_out_period, this.return_date);
+    }
+
     public int getCheckout_id() {
         return checkout_id;
     }

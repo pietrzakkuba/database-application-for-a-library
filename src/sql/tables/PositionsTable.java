@@ -11,6 +11,10 @@ public class PositionsTable {
         this.number_of_employees = number_of_employees;
     }
 
+    public String getAll() {
+        return String.format("%s %s %d", this.name, this.minimal_hourly_rate, this.number_of_employees);
+    }
+
     public String getName() {
         return name;
     }

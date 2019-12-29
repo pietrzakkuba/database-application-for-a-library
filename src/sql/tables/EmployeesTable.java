@@ -25,6 +25,10 @@ public class EmployeesTable {
         this.hourly_rate = hourly_rate;
     }
 
+    public String getAll() {
+        return String.format("%d %s %s %s %s %s %s %s %s", this.id, this.first_name, this.last_name, this.position, this.affiliate, this.date_of_employment, this.date_of_signing_contract, this.date_of_contract_expiration, this.hourly_rate);
+    }
+
     public int getId() {
         return id;
     }

@@ -17,6 +17,10 @@ public class BooksTable {
         this.number_of_orders = number_of_orders;
     }
 
+    public String getAll() {
+        return String.format("%d %s %s %s %d %d", this.id, this.title, this.author_first_name, this.author_last_name, this.number_of_copies, this.number_of_orders);
+    }
+
     public int getId() {
         return id;
     }

@@ -41,7 +41,7 @@
                 <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="206.0" styleClass="back-button" text="Modify" GridPane.columnIndex="1" />
                 <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="184.0" styleClass="exit-button" text="Delete" GridPane.columnIndex="2" />
                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="159.0" prefWidth="301.0" styleClass="search-box-label" text="Search Box:" GridPane.columnIndex="3" />
-                <TextField GridPane.columnIndex="4" />
+                <TextField fx:id="filter_text_box" onKeyReleased="#filtering" GridPane.columnIndex="4" />
             </children>
         </GridPane>
     </children>

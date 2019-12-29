@@ -13,12 +13,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
+import sql.tables.AffiliatesTable;
 import sql.tables.ShiftScheduleTable;
 
 import java.io.IOException;
@@ -33,12 +37,16 @@ public class ShiftScheduleController implements Initializable {
     public TableColumn<ShiftScheduleTable, Date> valid_from;
     public TableColumn<ShiftScheduleTable, Date> valid_to;
     public TableColumn<ShiftScheduleTable, Integer> number_of_shifts;
+    public TextField filter_text_box;
+
+    private ObservableList<ShiftScheduleTable> data;
+    private ArrayList<ShiftScheduleTable> filtered_data = new ArrayList<ShiftScheduleTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             DatabaseConnection.loadShiftSchedule();
-            ObservableList<ShiftScheduleTable> data = FXCollections.observableArrayList(DatabaseConnection.getShiftScheduleTableArrayList());
+            data = FXCollections.observableArrayList(DatabaseConnection.getShiftScheduleTableArrayList());
             id.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Integer>("id"));
             is_valid.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Boolean>("is_valid"));
             affiliate_name.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, String>("affiliate_name"));
@@ -60,5 +68,15 @@ public class ShiftScheduleController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void filtering(KeyEvent onKeyReleased) {
+        filtered_data.clear();
+        for (ShiftScheduleTable datum : data) {
+            if (datum.getAll().replaceAll("null", "").toLowerCase().contains(filter_text_box.getText().toLowerCase())) {
+                filtered_data.add(datum);
+            }
+        }
+        mainTable.setItems(FXCollections.observableArrayList(filtered_data));
     }
 }

@@ -19,6 +19,10 @@ public class ReadersTable {
         this.number_of_borrowed_books = number_of_borrowed_books;
     }
 
+    public String getAll() {
+        return String.format("%d %s %s %s %s %d", this.id, this.first_name, this.last_name, this.year_of_birth, this.date_of_signing_in, this.number_of_borrowed_books);
+    }
+
     public int getId() {
         return id;
     }

@@ -13,11 +13,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
 import sql.tables.AuthorsTable;
 
@@ -33,12 +36,16 @@ public class AuthorsController implements Initializable {
     public TableColumn<AuthorsTable, Date> date_of_birth;
     public TableColumn<AuthorsTable, Date> date_of_death;
     public TableColumn<AuthorsTable, String> nationality;
+    public TextField filter_text_box;
+
+    private ObservableList<AuthorsTable> data;
+    private ArrayList<AuthorsTable> filtered_data = new ArrayList<AuthorsTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             DatabaseConnection.loadAuthors();
-            ObservableList<AuthorsTable> data = FXCollections.observableArrayList(DatabaseConnection.getAuthorsTableArrayList());
+            data = FXCollections.observableArrayList(DatabaseConnection.getAuthorsTableArrayList());
             id.setCellValueFactory(new PropertyValueFactory<AuthorsTable, Integer>("id"));
             first_name.setCellValueFactory(new PropertyValueFactory<AuthorsTable, String>("first_name"));
             last_name.setCellValueFactory(new PropertyValueFactory<AuthorsTable, String>("last_name"));
@@ -60,5 +67,15 @@ public class AuthorsController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void filtering(KeyEvent onKeyReleased) {
+        filtered_data.clear();
+        for (AuthorsTable datum : data) {
+            if (datum.getAll().replaceAll("null", "").toLowerCase().contains(filter_text_box.getText().toLowerCase())) {
+                filtered_data.add(datum);
+            }
+        }
+        mainTable.setItems(FXCollections.observableArrayList(filtered_data));
     }
 }

@@ -15,6 +15,10 @@ public class AffiliatesTable {
         this.number_of_employees = number_of_employees;
     }
 
+    public String getAll() {
+        return String.format("%d %s %d %d %d", this.id_number, this.address, this.opening_hours_from, this.opening_hours_to, this.number_of_employees);
+    }
+
     public int getId_number() {
         return id_number;
     }

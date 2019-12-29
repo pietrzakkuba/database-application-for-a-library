@@ -17,6 +17,10 @@ public class ShiftsTable {
         this.shift_length = shift_length;
     }
 
+    public String getAll() {
+        return String.format("%s %s %s %s %s %s", this.schedule_name, this.time_from, this.time_to, this.employee_first_name, this.employee_last_name, this.shift_length);
+    }
+
     public String getSchedule_name() {
         return schedule_name;
     }

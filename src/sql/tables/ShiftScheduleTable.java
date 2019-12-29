@@ -21,6 +21,10 @@ public class ShiftScheduleTable {
         this.number_of_shifts = number_of_shifts;
     }
 
+    public String getAll() {
+        return String.format("%d %b %s %s %s %s %d", this.id, this.is_valid, this.affiliate_name, this.schedule_name, this.valid_from, this.valid_to, this.number_of_shifts);
+    }
+
     public int getId() {
         return id;
     }

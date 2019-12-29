@@ -17,6 +17,10 @@ public class OrdersTable {
         this.book_title = book_title;
     }
 
+    public String getAll() {
+        return String.format("%d %s %s %s %s ", this.id, this.order_date, this.reader_first_name, this.reader_last_name, this.book_title);
+    }
+
     public int getId() {
         return id;
     }

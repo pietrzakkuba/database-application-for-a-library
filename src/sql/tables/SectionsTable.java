@@ -15,6 +15,10 @@ public class SectionsTable {
         this.affiliate_name = affiliate_name;
     }
 
+    public String getAll() {
+        return String.format("%d %s %s %d %s", this.section_id, this.section_name, this.section_short_name, this.number_of_books, this.affiliate_name);
+    }
+
     public int getSection_id() {
         return section_id;
     }

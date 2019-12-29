@@ -13,12 +13,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
+import sql.tables.AffiliatesTable;
 import sql.tables.EmployeesTable;
 
 import java.io.IOException;
@@ -35,12 +39,16 @@ public class EmployeesController implements Initializable {
     public TableColumn<EmployeesTable, Date> date_of_signing_contract;
     public TableColumn<EmployeesTable, Date> date_of_contract_expiration;
     public TableColumn<EmployeesTable, Double> hourly_rate;
+    public TextField filter_text_box;
+
+    private ObservableList<EmployeesTable> data;
+    private ArrayList<EmployeesTable> filtered_data = new ArrayList<EmployeesTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             DatabaseConnection.loadEmployees();
-            ObservableList<EmployeesTable> data = FXCollections.observableArrayList(DatabaseConnection.getEmployeesTableArrayList());
+            data = FXCollections.observableArrayList(DatabaseConnection.getEmployeesTableArrayList());
             id.setCellValueFactory(new PropertyValueFactory<EmployeesTable, Integer>("id"));
             first_name.setCellValueFactory(new PropertyValueFactory<EmployeesTable, String>("first_name"));
             last_name.setCellValueFactory(new PropertyValueFactory<EmployeesTable, String>("last_name"));
@@ -64,5 +72,15 @@ public class EmployeesController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void filtering(KeyEvent onKeyReleased) {
+        filtered_data.clear();
+        for (EmployeesTable datum : data) {
+            if (datum.getAll().replaceAll("null", "").toLowerCase().contains(filter_text_box.getText().toLowerCase())) {
+                filtered_data.add(datum);
+            }
+        }
+        mainTable.setItems(FXCollections.observableArrayList(filtered_data));
     }
 }

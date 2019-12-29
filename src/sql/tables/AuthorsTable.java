@@ -1,5 +1,7 @@
 package sql.tables;
 
+import fxapp.Main;
+
 import java.sql.Date;
 
 public class AuthorsTable {
@@ -19,6 +21,10 @@ public class AuthorsTable {
         this.date_of_birth = date_of_birth;
         this.date_of_death = date_of_death;
         this.nationality = nationality;
+    }
+
+    public String getAll() {
+        return String.format("%d %s %s %s %s %s %s", this.id, this.first_name, this.last_name, this.pseudonym, this.date_of_birth, this.date_of_death, this.nationality);
     }
 
     public int getId() {
