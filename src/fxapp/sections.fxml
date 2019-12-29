@@ -13,13 +13,12 @@
                 <String fx:value="back-button" />
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
-
-        <columns>
-                <TableColumn prefWidth="59.0" text="ID" />
-                <TableColumn prefWidth="191.0" text="Name" />
-                <TableColumn prefWidth="107.0" text="Short name" />
-                <TableColumn prefWidth="123.0" text="Number of books" />
-            <TableColumn prefWidth="381.0" text="Affiliate" />
+            <columns>
+                <TableColumn fx:id="section_id" prefWidth="59.0" text="ID" />
+                <TableColumn fx:id="section_name" prefWidth="191.0" text="Name" />
+                <TableColumn fx:id="section_short_name" prefWidth="107.0" text="Short name" />
+                <TableColumn fx:id="number_of_books" prefWidth="123.0" text="Number of books" />
+                <TableColumn fx:id="affiliate_name" prefWidth="381.0" text="Affiliate" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

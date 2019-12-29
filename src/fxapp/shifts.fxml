@@ -20,13 +20,13 @@
                 <String fx:value="back-button" />
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
-        <columns>
-                <TableColumn prefWidth="129.0" text="Schedule" />
-                <TableColumn prefWidth="109.0" text="Time - from" />
-                <TableColumn prefWidth="95.0" text="Time - to" />
-                <TableColumn prefWidth="185.0" text="Employee - first name" />
-                <TableColumn prefWidth="133.0" text="Employee - last name" />
-                <TableColumn prefWidth="111.0" text="Shift's length" />
+            <columns>
+                <TableColumn fx:id="schedule_name" prefWidth="129.0" text="Schedule" />
+                <TableColumn fx:id="time_from" prefWidth="109.0" text="Time - from" />
+                <TableColumn fx:id="time_to" prefWidth="95.0" text="Time - to" />
+                <TableColumn fx:id="employee_first_name" prefWidth="185.0" text="Employee - first name" />
+                <TableColumn fx:id="employee_last_name" prefWidth="133.0" text="Employee - last name" />
+                <TableColumn fx:id="shift_length" prefWidth="111.0" text="Shift's length" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

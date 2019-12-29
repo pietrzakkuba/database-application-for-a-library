@@ -14,13 +14,13 @@
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
         <columns>
-                <TableColumn prefWidth="43.0" text="ID" />
-                <TableColumn prefWidth="78.0" text="Is valid" />
-                <TableColumn prefWidth="121.0" text="Affiliate" />
-                <TableColumn prefWidth="152.0" text="Name" />
-                <TableColumn prefWidth="150.0" text="Valid from" />
-                <TableColumn prefWidth="137.0" text="Valid to" />
-                <TableColumn prefWidth="122.0" text="Number of shifts" />
+                <TableColumn fx:id="id" prefWidth="43.0" text="ID" />
+                <TableColumn fx:id="is_valid" prefWidth="78.0" text="Is valid" />
+                <TableColumn fx:id="affiliate_name" prefWidth="121.0" text="Affiliate" />
+                <TableColumn fx:id="schedule_name" prefWidth="152.0" text="Name" />
+                <TableColumn fx:id="valid_from" prefWidth="150.0" text="Valid from" />
+                <TableColumn fx:id="valid_to" prefWidth="137.0" text="Valid to" />
+                <TableColumn fx:id="number_of_shifts" prefWidth="122.0" text="Number of shifts" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

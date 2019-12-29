@@ -21,12 +21,12 @@
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
         <columns>
-                <TableColumn prefWidth="59.0" text="ID" />
-                <TableColumn prefWidth="155.0" text="First name" />
-                <TableColumn prefWidth="213.0" text="Last name" />
-                <TableColumn prefWidth="103.0" text="Year of birth" />
-                <TableColumn prefWidth="155.0" text="Date of signing in" />
-            <TableColumn prefWidth="173.0" text="Number of borrowed books " />
+                <TableColumn fx:id="id" prefWidth="59.0" text="ID" />
+                <TableColumn fx:id="first_name" prefWidth="155.0" text="First name" />
+                <TableColumn fx:id="last_name" prefWidth="213.0" text="Last name" />
+                <TableColumn fx:id="year_of_birth" prefWidth="103.0" text="Year of birth" />
+                <TableColumn fx:id="date_of_signing_in" prefWidth="155.0" text="Date of signing in" />
+                <TableColumn fx:id="number_of_borrowed_books" prefWidth="173.0" text="Number of borrowed books " />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

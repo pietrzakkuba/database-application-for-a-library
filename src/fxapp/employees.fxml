@@ -14,15 +14,15 @@
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
-                <TableColumn prefWidth="38.0" text="ID" />
-                <TableColumn prefWidth="87.0" text="First name" />
-                <TableColumn prefWidth="101.0" text="Last name" />
-                <TableColumn prefWidth="74.0" text="Position" />
-                <TableColumn prefWidth="73.0" text="Affiliate" />
-                <TableColumn prefWidth="125.0" text="Date of employment" />
-                <TableColumn prefWidth="154.0" text="Date of signing a contract" />
-            <TableColumn minWidth="0.0" prefWidth="160.0" text="Date of contract expiration" />
-            <TableColumn prefWidth="72.0" text="Hourly rate" />
+                <TableColumn fx:id="id" prefWidth="38.0" text="ID" />
+                <TableColumn fx:id="first_name" prefWidth="87.0" text="First name" />
+                <TableColumn fx:id="last_name" prefWidth="101.0" text="Last name" />
+                <TableColumn fx:id="position" prefWidth="74.0" text="Position" />
+                <TableColumn fx:id="affiliate" prefWidth="73.0" text="Affiliate" />
+                <TableColumn fx:id="date_of_employment" prefWidth="125.0" text="Date of employment" />
+                <TableColumn fx:id="date_of_signing_contract" prefWidth="154.0" text="Date of signing a contract" />
+                <TableColumn fx:id="date_of_contract_expiration" minWidth="0.0" prefWidth="160.0" text="Date of contract expiration" />
+                <TableColumn fx:id="hourly_rate" prefWidth="72.0" text="Hourly rate" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

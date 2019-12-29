@@ -21,14 +21,14 @@
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
-                <TableColumn prefWidth="59.0" text="ID" />
-                <TableColumn prefWidth="129.0" text="Reader - first name" />
-                <TableColumn prefWidth="127.0" text="Reader - last name" />
-                <TableColumn prefWidth="133.0" text="Book's title" />
-                <TableColumn prefWidth="77.0" text="Copy's ID" />
-                <TableColumn prefWidth="113.0" text="Date of check out" />
-            <TableColumn minWidth="0.0" prefWidth="107.0" text="Check out pieriod" />
-            <TableColumn prefWidth="128.0" text="Return date" />
+                <TableColumn fx:id="checkout_id" prefWidth="59.0" text="ID" />
+                <TableColumn fx:id="reader_first_name" prefWidth="129.0" text="Reader - first name" />
+                <TableColumn fx:id="reader_last_name" prefWidth="127.0" text="Reader - last name" />
+                <TableColumn fx:id="book_title" prefWidth="133.0" text="Book's title" />
+                <TableColumn fx:id="copy_id" prefWidth="77.0" text="Copy's ID" />
+                <TableColumn fx:id="check_out_date" prefWidth="113.0" text="Date of check out" />
+                <TableColumn fx:id="check_out_period" minWidth="0.0" prefWidth="107.0" text="Check out pieriod" />
+                <TableColumn fx:id="return_date" prefWidth="128.0" text="Return date" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

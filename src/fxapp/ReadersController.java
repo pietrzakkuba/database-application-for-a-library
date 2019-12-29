@@ -1,17 +1,53 @@
 package fxapp;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class ReadersController {
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import sql.DatabaseConnection;
+import sql.tables.ReadersTable;
+
+
+public class ReadersController implements Initializable {
     public Button toMainMenuButton;
-    public TableView mainTable;
+    public TableView<ReadersTable> mainTable;
+    public TableColumn<ReadersTable, Integer> id;
+    public TableColumn<ReadersTable, String> first_name;
+    public TableColumn<ReadersTable, String> last_name;
+    public TableColumn<ReadersTable, Date> year_of_birth;
+    public TableColumn<ReadersTable, Date> date_of_signing_in;
+    public TableColumn<ReadersTable, Integer> number_of_borrowed_books;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            DatabaseConnection.loadReaders();
+            ObservableList<ReadersTable> data = FXCollections.observableArrayList(DatabaseConnection.getReadersTableArrayList());
+            id.setCellValueFactory(new PropertyValueFactory<ReadersTable, Integer>("id"));
+            first_name.setCellValueFactory(new PropertyValueFactory<ReadersTable, String>("first_name"));
+            last_name.setCellValueFactory(new PropertyValueFactory<ReadersTable, String>("last_name"));
+            year_of_birth.setCellValueFactory(new PropertyValueFactory<ReadersTable, Date>("year_of_birth"));
+            date_of_signing_in.setCellValueFactory(new PropertyValueFactory<ReadersTable, Date>("date_of_signing_in"));
+            number_of_borrowed_books.setCellValueFactory(new PropertyValueFactory<ReadersTable, Integer>("number_of_borrowed_books"));
+            mainTable.setItems(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void toMainMenu(ActionEvent actionEvent) {
         Platform.runLater( () -> {

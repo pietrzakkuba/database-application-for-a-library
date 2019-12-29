@@ -79,7 +79,7 @@ public class DatabaseConnection {
                 "inf136729",
                 "inf136729"
         );
-        loadEverything();
+        // loadEverything();
     }
 
     public static void loadEverything() throws SQLException {
@@ -121,6 +121,7 @@ public class DatabaseConnection {
                             resultSet.getInt(4),
                             resultSet.getInt(5)
                     ));
+
         }
     }
 

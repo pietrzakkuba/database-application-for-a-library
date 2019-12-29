@@ -14,14 +14,14 @@
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
-                <TableColumn prefWidth="50.0" text="ID" />
-                <TableColumn prefWidth="201.0" text="Book's title" />
-                <TableColumn prefWidth="90.0" text="Availability" />
-                <TableColumn prefWidth="65.0" text="Section" />
-                <TableColumn prefWidth="157.0" text="Affiliate" />
-                <TableColumn prefWidth="111.0" text="Release number" />
-            <TableColumn prefWidth="100.0" text="Release year" />
-            <TableColumn prefWidth="110.0" text="Type of a cover" />
+                <TableColumn fx:id="copy_id" prefWidth="50.0" text="ID" />
+                <TableColumn fx:id="book_title" prefWidth="201.0" text="Book's title" />
+                <TableColumn fx:id="availability" prefWidth="90.0" text="Availability" />
+                <TableColumn fx:id="section" prefWidth="65.0" text="Section" />
+                <TableColumn fx:id="affiliate" prefWidth="157.0" text="Affiliate" />
+                <TableColumn fx:id="release_number" prefWidth="111.0" text="Release number" />
+                <TableColumn fx:id="release_year" prefWidth="100.0" text="Release year" />
+                <TableColumn fx:id="type_of_cover" prefWidth="110.0" text="Type of a cover" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">

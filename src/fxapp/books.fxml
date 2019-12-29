@@ -14,12 +14,12 @@
             </styleClass></Button>
         <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
             <columns>
-                <TableColumn prefWidth="52.0" text="ID" />
-                <TableColumn prefWidth="165.0" text="Title" />
-                <TableColumn prefWidth="170.0" text="Author - first name" />
-                <TableColumn prefWidth="252.0" text="Author - last name" />
-                <TableColumn prefWidth="116.0" text="Number of copies" />
-            <TableColumn prefWidth="113.0" text="Number of orders" />
+                <TableColumn fx:id="id" prefWidth="52.0" text="ID" />
+                <TableColumn fx:id="title" prefWidth="165.0" text="Title" />
+                <TableColumn fx:id="author_first_name" prefWidth="170.0" text="Author - first name" />
+                <TableColumn fx:id="author_last_name" prefWidth="252.0" text="Author - last name" />
+                <TableColumn fx:id="number_of_copies" prefWidth="116.0" text="Number of copies" />
+                <TableColumn fx:id="number_of_orders" prefWidth="113.0" text="Number of orders" />
             </columns>
         </TableView>
         <GridPane hgap="5.0" layoutX="22.0" layoutY="555.0">
