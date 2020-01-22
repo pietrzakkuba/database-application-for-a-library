@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.ReadersController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.ReadersController">
     <children>
         <Label alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" prefHeight="17.0" prefWidth="954.0" styleClass="our-library-label" text="Readers" />
         <Button fx:id="toMainMenuButton" layoutX="832.0" layoutY="553.0" mnemonicParsing="false" onAction="#toMainMenu" prefHeight="35.0" prefWidth="94.0" text="Back">
@@ -41,9 +34,9 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Add" />
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="206.0" styleClass="back-button" text="Modify" GridPane.columnIndex="1" />
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="184.0" styleClass="exit-button" text="Delete" GridPane.columnIndex="2" />
+                <Button mnemonicParsing="false" onAction="#add" prefHeight="35.0" prefWidth="100.0" text="Add" />
+                <Button mnemonicParsing="false" onAction="#modify" prefHeight="35.0" prefWidth="206.0" styleClass="back-button" text="Modify" GridPane.columnIndex="1" />
+                <Button mnemonicParsing="false" onAction="#delete" prefHeight="35.0" prefWidth="184.0" styleClass="exit-button" text="Delete" GridPane.columnIndex="2" />
                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="159.0" prefWidth="301.0" styleClass="search-box-label" text="Search Box:" GridPane.columnIndex="3" />
                 <TextField fx:id="filter_text_box" onKeyReleased="#filtering" GridPane.columnIndex="4" />
             </children>

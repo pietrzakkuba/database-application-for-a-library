@@ -37,9 +37,9 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="100.0" text="Add" />
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="206.0" styleClass="back-button" text="Modify" GridPane.columnIndex="1" />
-                <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="184.0" styleClass="exit-button" text="Delete" GridPane.columnIndex="2" />
+                <Button mnemonicParsing="false" onAction="#add" prefHeight="35.0" prefWidth="100.0" text="Add" />
+                <Button mnemonicParsing="false" onAction="#modify" prefHeight="35.0" prefWidth="206.0" styleClass="back-button" text="Modify" GridPane.columnIndex="1" />
+                <Button mnemonicParsing="false" onAction="#delete" prefHeight="35.0" prefWidth="184.0" styleClass="exit-button" text="Delete" GridPane.columnIndex="2" />
                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="159.0" prefWidth="301.0" styleClass="search-box-label" text="Search Box:" GridPane.columnIndex="3" />
                 <TextField fx:id="filter_text_box" onKeyReleased="#filtering" GridPane.columnIndex="4" />
             </children>

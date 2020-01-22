@@ -1,12 +1,17 @@
 package fxapp;
 
+import fxapp.editWindows.AddElement;
+import fxapp.editWindows.MethodPasser;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
@@ -15,6 +20,7 @@ import java.lang.reflect.Array;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TableColumn;
@@ -22,6 +28,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
 
@@ -37,6 +47,39 @@ public class AffiliatesController implements Initializable {
 
     private ObservableList<AffiliatesTable> data;
     private ArrayList<AffiliatesTable> filtered_data = new ArrayList<AffiliatesTable>();
+
+    @FXML
+    void add(ActionEvent event) {
+        try {
+            Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+            ArrayList<String> list = new ArrayList<>();
+            list.add("Number");
+            list.add("Address");
+            list.add("Opened from");
+            list.add("Opened till");
+            list.add("Opened date");
+
+            ArrayList<Integer> dateElements = new ArrayList<>();
+            dateElements.add(4);
+
+            AddElement.startAdding(currentWindow, list, dateElements, DatabaseConnection::addAffiliates,"Add affiliate");
+            currentWindow.hide();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void delete(ActionEvent event) {
+
+    }
+
+    @FXML
+    void modify(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

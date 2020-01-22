@@ -82,6 +82,19 @@ public class DatabaseConnection {
         // loadEverything();
     }
 
+    public static void addAffiliates(String[] values){
+        String number = values[0], address = values[1], open_hour = values[2], close_hour = values[3];
+        String query =  "insert into FILIE (adres, godziny_pracy_od, godziny_pracy_do)" +
+                "values ( \'" + address + "\', " + open_hour + ", " + close_hour + ")";
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void loadEverything() throws SQLException {
         loadAffiliates();
         loadAuthors();

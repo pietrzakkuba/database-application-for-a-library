@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -68,6 +69,21 @@ public class CopiesController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    @FXML
+    void add(ActionEvent event) {
+
+    }
+
+    @FXML
+    void delete(ActionEvent event) {
+
+    }
+
+    @FXML
+    void modify(ActionEvent event) {
+
     }
 
     public void filtering(KeyEvent onKeyReleased) {
