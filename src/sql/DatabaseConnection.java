@@ -116,9 +116,9 @@ public class DatabaseConnection {
         }
         String query =  "select numer, adres, godziny_pracy_od, godziny_pracy_do, count(distinct j.id_pracownika) " +
                         "from filie " +
-                        "inner join grafik_dyzurow g " +
+                        "left join grafik_dyzurow g " +
                         "on numer = g.numer_filii " +
-                        "inner join jednostka_pracy j " +
+                        "left join jednostka_pracy j " +
                         "on g.id = j.id_grafiku " +
                         "left join pracownicy p " +
                         "on p.id = j.id_pracownika " +
