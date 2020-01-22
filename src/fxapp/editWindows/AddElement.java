@@ -63,7 +63,7 @@ public class AddElement {
 
     private String[] getValues(){
         ObservableList<Node> children = editFields.getChildren();
-        String[] values = new String[editFields.getRowCount()];
+        String[] values = new String[editFields.getChildren().size()/2];
         for(int i=0; i<values.length; i++){
             if(dateFields.contains(i)){
                 values[i] = String.valueOf(((DatePicker)children.get(i*2 + 1)).getValue());
@@ -79,7 +79,13 @@ public class AddElement {
 
     @FXML
     void add(ActionEvent event) {
-        methodPasser.exec(getValues());
+        try{
+            methodPasser.exec(getValues());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        returnToParentWindow(event);
     }
 
     @FXML
