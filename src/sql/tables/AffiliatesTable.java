@@ -1,5 +1,7 @@
 package sql.tables;
 
+import java.util.ArrayList;
+
 public class AffiliatesTable {
     private int id_number;
     private String address;

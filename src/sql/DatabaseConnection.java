@@ -2,6 +2,8 @@ package sql;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import sql.tables.*;
 
@@ -82,17 +84,261 @@ public class DatabaseConnection {
         // loadEverything();
     }
 
-    public static void addAffiliates(String[] values){
-        String number = values[0], address = values[1], open_hour = values[2], close_hour = values[3];
-        String query =  "insert into FILIE (adres, godziny_pracy_od, godziny_pracy_do)" +
-                "values ( \'" + address + "\', " + open_hour + ", " + close_hour + ")";
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
+    private enum Types{
+        string,
+        value,
+        date
+    }
+
+    private static String insertStatement(String table, ArrayList<String> fields, ArrayList<String> values, ArrayList<Types> types){
+        String query =  "insert into " + table + " (";
+        for(int i=0; i<fields.size(); i++){
+            query += fields.get(i) + ",";
+        }
+        query = query.substring(0,query.length()-1);
+        query += ") values (";
+
+        for(int i=0; i<values.size(); i++){
+            query = decorateString(values, (ArrayList<Types>) types, query, i, ",");
+        }
+
+        query = query.substring(0,query.length()-1);
+        query += ")";
+        try{
+            Statement statement = connection.createStatement();
             statement.executeQuery(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+            return "Fatal error occurs...";
         }
+        return null;
+    }
+
+    private static String updateStatement(String table, ArrayList<String> fields, ArrayList<String> values, ArrayList<Types> types, ArrayList<String> keyFields, ArrayList<String> keyValues, ArrayList<Types> keyTypes){
+        String query =  "update " + table + " set ";
+        for(int i=0; i<fields.size(); i++){
+            query += fields.get(i) + " = ";
+            query = decorateString(values, types, query, i, ",");
+        }
+        query = query.substring(0,query.length()-1);
+        query += " where ";
+        for(int i=0; i<keyFields.size(); i++){
+            query += keyFields.get(i) + " = ";
+            query = decorateString(keyValues, keyTypes, query, i, " and ");
+        }
+        query = query.substring(0,query.length()-5);
+
+        try{
+            Statement statement = connection.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e) {
+            return "Fatal error occurs...";
+        }
+        return null;
+    }
+
+    private static String updateStatement(String table, ArrayList<String> fields, ArrayList<String> values, ArrayList<Types> types, String keyField, String keyValue){
+        String query =  "update " + table + " set ";
+        for(int i=0; i<fields.size(); i++){
+            query += fields.get(i) + " = ";
+            query = decorateString(values, types, query, i, ",");
+        }
+        query = query.substring(0,query.length()-1);
+
+        query += " where " + keyField + " = " + keyValue;
+
+        try{
+            Statement statement = connection.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e) {
+            return "Fatal error occurs...";
+        }
+        return null;
+    }
+
+    private static String deleteStatement(String table, String id_field, String id_value){
+        String query =  "delete from " + table + " where " + id_field + " = " + id_value;
+        try{
+            Statement statement = connection.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e) {
+            return "Fatal error occurs...";
+        }
+        return null;
+    }
+
+    private static String deleteStatement(String table, ArrayList<String> fields, ArrayList<String> values, ArrayList<Types> types){
+        String query =  "delete from " + table + " where ";
+        for(int i=0; i<fields.size(); i++){
+            query += fields.get(i) + " = ";
+            query = decorateString(values, types, query, i, " and ");
+        }
+        query = query.substring(0,query.length()-5);
+
+        try{
+            Statement statement = connection.createStatement();
+            statement.executeQuery(query);
+        } catch (SQLException e) {
+            return "Fatal error occurs...";
+        }
+        return null;
+    }
+
+    private static String decorateString(ArrayList<String> values, ArrayList<Types> types, String query, int i, String delimiter) {
+        if(types.get(i) == Types.string){
+            query += "'" + values.get(i) + "'";
+        }else if(types.get(i) == Types.date){
+            query += "TO_DATE('"+values.get(i)+"','YYYY-MM-DD')";
+        }else if(types.get(i) == Types.value){
+            query += values.get(i);
+        }
+        query += delimiter;
+        return query;
+    }
+
+    public static String addAffiliates(String[] values){
+        String address = values[0], open_hour = values[1], close_hour = values[2];
+
+        int from, to;
+        if(address.equals("")){
+            return "Address can't be empty";
+        }
+        try
+        {
+            from = Integer.parseInt(open_hour.trim());
+            if(from>24){
+                throw new NumberFormatException();
+            }
+        }
+        catch (NumberFormatException nfe)
+        {
+            return "Incorrect \"Opened from\" value";
+        }
+        try
+        {
+            to = Integer.parseInt(close_hour.trim());
+            if(to>24){
+                throw new NumberFormatException();
+            }
+        }
+        catch (NumberFormatException nfe)
+        {
+            return "Incorrect \"Opened from\" value";
+        }
+        if(from>=to){
+            return "Work time must be positive number";
+        }
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("adres","godziny_pracy_od","godziny_pracy_do"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(values));
+        return insertStatement("FILIE", fitFields, fitValues, fitTypes);
+    }
+
+    public static String modifyAffiliates(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String address = values[0], open_hour = values[1], close_hour = values[2];
+
+        int from, to;
+        if(address.equals("")){
+            return "Address can't be empty";
+        }
+        try
+        {
+            from = Integer.parseInt(open_hour.trim());
+            if(from>24){
+                throw new NumberFormatException();
+            }
+        }
+        catch (NumberFormatException nfe)
+        {
+            return "Incorrect \"Opened from\" value";
+        }
+        try
+        {
+            to = Integer.parseInt(close_hour.trim());
+            if(to>24){
+                throw new NumberFormatException();
+            }
+        }
+        catch (NumberFormatException nfe)
+        {
+            return "Incorrect \"Opened from\" value";
+        }
+        if(from>=to){
+            return "Work time must be positive number";
+        }
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("adres","godziny_pracy_od","godziny_pracy_do"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(values));
+        return updateStatement("filie", fitFields, fitValues, fitTypes, "numer", id);
+    }
+
+    public static String deleteAffiliates(String[] values) {
+        String id = values[0];
+        return deleteStatement("Filie","numer",id);
+    }
+
+    public static String addAuthor(String[] values){
+        String FirstName = values[0], LastName = values[1], Pseudonym = values[2], Nationality = values[3], Date_of_birth = values[4], Date_of_death = values[5];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("IMIE","NAZWISKO"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(FirstName,LastName));
+        if(!(Pseudonym.equals("null") || Pseudonym.equals(""))){
+            fitFields.add("pseudonim");
+            fitValues.add(Pseudonym);
+            fitTypes.add(Types.string);
+        }
+        if(!(Date_of_birth.equals("null") || Date_of_birth.equals(""))){
+            fitFields.add("data_urodzin");
+            fitValues.add(Date_of_birth);
+            fitTypes.add(Types.date);
+        }
+        if(!(Date_of_death.equals("null") || Date_of_death.equals(""))){
+            fitFields.add("data_smierci");
+            fitValues.add(Date_of_death);
+            fitTypes.add(Types.date);
+        }
+        if(!(Nationality.equals("null") || Nationality.equals(""))){
+            fitFields.add("narodowosc");
+            fitValues.add(Nationality);
+            fitTypes.add(Types.string);
+        }
+        return insertStatement("Autorzy",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyAuthor(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String FirstName = values[0], LastName = values[1], Pseudonym = values[2], Nationality = values[3], Date_of_birth = values[4], Date_of_death = values[5];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("IMIE","NAZWISKO"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(FirstName,LastName));
+        if(!(Pseudonym.equals("null") || Pseudonym.equals(""))){
+            fitFields.add("pseudonim");
+            fitValues.add(Pseudonym);
+            fitTypes.add(Types.string);
+        }
+        if(!(Date_of_birth.equals("null") || Date_of_birth.equals(""))){
+            fitFields.add("data_urodzin");
+            fitValues.add(Date_of_birth);
+            fitTypes.add(Types.date);
+        }
+        if(!(Date_of_death.equals("null") || Date_of_death.equals(""))){
+            fitFields.add("data_smierci");
+            fitValues.add(Date_of_death);
+            fitTypes.add(Types.date);
+        }
+        if(!(Nationality.equals("null") || Nationality.equals(""))){
+            fitFields.add("narodowosc");
+            fitValues.add(Nationality);
+            fitTypes.add(Types.string);
+        }
+        return updateStatement("Autorzy",fitFields,fitValues,fitTypes,"id",id);
+    }
+
+    public static String deleteAuthor(String[] values) {
+        String id = values[0];
+        return deleteStatement("Autorzy","id", id);
     }
 
     public static void loadEverything() throws SQLException {
@@ -137,6 +383,8 @@ public class DatabaseConnection {
 
         }
     }
+
+
 
     public static void loadAuthors() throws SQLException {
         if (authorsTableArrayList.size() > 0) {

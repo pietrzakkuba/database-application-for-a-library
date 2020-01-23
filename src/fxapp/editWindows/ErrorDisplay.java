@@ -19,6 +19,7 @@ public class ErrorDisplay {
 
     public void displayErrorMessage(){
         label.setText(string);
+        label.setVisible(true);
         FadeTransition f = new FadeTransition(new Duration(5000),label);
         f.setFromValue(1);
         f.setToValue(0);

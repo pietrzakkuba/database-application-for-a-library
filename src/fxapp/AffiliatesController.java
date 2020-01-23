@@ -1,6 +1,7 @@
 package fxapp;
 
 import fxapp.editWindows.AddElement;
+import fxapp.editWindows.DeleteElement;
 import fxapp.editWindows.MethodPasser;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -13,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -23,9 +24,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
@@ -35,7 +33,7 @@ import javafx.stage.Window;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
 
-public class AffiliatesController implements Initializable {
+public class AffiliatesController extends Controller implements Initializable  {
     public Button toMainMenuButton;
     public TableView<AffiliatesTable> mainTable;
     public TableColumn<AffiliatesTable, Integer> id_number;
@@ -50,39 +48,95 @@ public class AffiliatesController implements Initializable {
 
     @FXML
     void add(ActionEvent event) {
-        try {
             Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
             ArrayList<String> list = new ArrayList<>();
-            list.add("Number");
             list.add("Address");
             list.add("Opened from");
             list.add("Opened till");
-            list.add("Opened date");
 
             ArrayList<Integer> dateElements = new ArrayList<>();
-            dateElements.add(4);
 
-            AddElement.startAdding(currentWindow, list, dateElements, DatabaseConnection::addAffiliates,"Add affiliate");
-            currentWindow.hide();
-        }
-        catch (IOException e) {
+        try {
+            AddElement.startAdding(this,currentWindow, list, dateElements, DatabaseConnection::addAffiliates,"Add affiliate");
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        currentWindow.hide();
     }
 
     @FXML
     void delete(ActionEvent event) {
+        TablePosition pos;
+        try {
+            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        int row = pos.getRow();
 
+        // Item here is the table view type:
+        AffiliatesTable item = mainTable.getItems().get(row);
+        ArrayList<String> values = new ArrayList<>();
+        values.add(Integer.toString(item.getId_number()));
+        values.add(item.getAddress());
+        values.add(Integer.toString(item.getOpening_hours_from()));
+        values.add(Integer.toString(item.getOpening_hours_to()));
+        values.add(Integer.toString(item.getNumber_of_employees()));
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Number");
+        list.add("Address");
+        list.add("Opened from");
+        list.add("Opened till");
+        list.add("Number of employees");
+
+        try {
+            DeleteElement.startDeleting(item.getId_number(),this,currentWindow, list, values, DatabaseConnection::deleteAffiliates,"Delete affiliate");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
     }
 
     @FXML
     void modify(ActionEvent event) {
+        TablePosition pos;
+        try {
+            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        int row = pos.getRow();
 
+        // Item here is the table view type:
+        AffiliatesTable item = mainTable.getItems().get(row);
+        ArrayList<String> values = new ArrayList<>();
+        values.add(item.getAddress());
+        values.add(Integer.toString(item.getOpening_hours_from()));
+        values.add(Integer.toString(item.getOpening_hours_to()));
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Address");
+        list.add("Opened from");
+        list.add("Opened till");
+
+        ArrayList<Integer> dateElements = new ArrayList<>();
+
+        try {
+            AddElement.startModifying(item.getId_number(),this,currentWindow, list, dateElements, values, DatabaseConnection::modifyAffiliates,"Add affiliate");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void reload(){
         try {
             DatabaseConnection.loadAffiliates();
             data = FXCollections.observableArrayList(DatabaseConnection.getAffiliatesTableArrayList());
@@ -95,7 +149,11 @@ public class AffiliatesController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        reload();
     }
 
     public void toMainMenu(ActionEvent actionEvent) {
