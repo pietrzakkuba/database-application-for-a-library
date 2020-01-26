@@ -1,46 +1,43 @@
 package fxapp.editWindows;
 
 import fxapp.Controller;
-import javafx.collections.ObservableList;
+import fxapp.containers.Parameter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import sql.DatabaseConnection;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class AddElement {
-    public static void startAdding(Controller parentController, Stage currentStage, ArrayList<String> elements, ArrayList<Integer> dateElements, MethodPasser methodPasser, String title) throws IOException {
+    public static void startAdding(Controller parentController, Stage currentStage, ArrayList<Parameter> parameters, MethodPasser methodPasser, String title) throws IOException {
         AddElement controller = createStage(currentStage,title);
-        controller.setEditFields(elements,dateElements);
+        controller.setEditFields(parameters);
         controller.getStage().show();
+        controller.parameters = parameters;
         controller.methodPasser = methodPasser;
-        controller.dateFields = dateElements;
         controller.parentController = parentController;
     }
 
-    public static void startModifying(int id, Controller parentController, Stage currentStage, ArrayList<String> elements, ArrayList<Integer> dateElements, ArrayList<String> values, MethodPasser methodPasser, String title) throws IOException {
+    public static void startModifying(int id, Controller parentController, Stage currentStage, ArrayList<Parameter> parameters ,MethodPasser methodPasser, String title) throws IOException {
         AddElement controller = createStage(currentStage,title);
-        controller.setEditFields(elements,dateElements,values);
+        controller.setEditFields(parameters);
         controller.getStage().show();
+        controller.parameters = parameters;
         controller.methodPasser = methodPasser;
-        controller.dateFields = dateElements;
         controller.parentController = parentController;
         controller.recordsID = id;
+        controller.isCreating = false;
     }
 
     public static AddElement createStage(Stage parentWindow,String title) throws IOException {
@@ -55,6 +52,10 @@ public class AddElement {
         return controller;
     }
 
+    private ArrayList<Parameter> parameters;
+
+    private Boolean isCreating = true;
+
     private Integer recordsID;
 
     private MethodPasser methodPasser;
@@ -68,31 +69,44 @@ public class AddElement {
 
     private Stage parentWindow;
 
-    private ArrayList<Integer> dateFields;
-
     public Stage getStage(){
         return (Stage)editFields.getScene().getWindow();
     }
 
-    private String[] getValues(){
-        ObservableList<Node> children = editFields.getChildren();
-        int size = editFields.getChildren().size()/2;
-        int j = 0;
-        if(recordsID != null){
-            size++;
-            j = 1;
+    private String[] getValuesToModify(){
+        String[] values = new String[parameters.size()+1];
+        values[0] = Integer.toString(recordsID);
+        for(int i=1; i<values.length; i++){
+            Parameter.Type type = parameters.get(i-1).getType();
+            if(type == Parameter.Type.textField){
+                values[i] = ((TextField)parameters.get(i-1).getValueField()).getText();
+            }else if(type == Parameter.Type.textFieldWithChoice){
+                if(parameters.get(i-1).getChosenID() == null){
+                    values[i] = "";
+                }else {
+                    values[i] = Integer.toString(parameters.get(i-1).getChosenID());
+                }
+            }else if(type == Parameter.Type.date){
+                values[i] = ((DatePicker)parameters.get(i-1).getValueField()).getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
         }
-        String[] values = new String[size];
-        if(recordsID != null){
-            values[0] = Integer.toString(recordsID);
-        }
-        for(int i=0; i<values.length-j; i++){
-            if(dateFields.contains(i)){
-                values[i+j] = String.valueOf(((DatePicker)children.get(i*2 + 1)).getValue());
-                if(values[i+j] == null) values[i+j] = "";
-            }else{
-                values[i+j] = ((TextField)children.get(i*2 + 1)).getText();
-                if(values[i+j] == null) values[i+j] = "";
+        return values;
+    }
+
+    private String[] getValuesToAdd(){
+        String[] values = new String[parameters.size()];
+        for(int i=0; i<values.length; i++){
+            Parameter.Type type = parameters.get(i).getType();
+            if(type == Parameter.Type.textField){
+                values[i] = ((TextField)parameters.get(i).getValueField()).getText();
+            }else if(type == Parameter.Type.textFieldWithChoice){
+                if(parameters.get(i).getChosenID() == null){
+                    values[i] = "";
+                }else {
+                    values[i] = Integer.toString(parameters.get(i).getChosenID());
+                }
+            }else if(type == Parameter.Type.date){
+                values[i] = ((DatePicker)parameters.get(i).getValueField()).getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             }
         }
         return values;
@@ -103,7 +117,12 @@ public class AddElement {
 
     @FXML
     void add(ActionEvent event) {
-        String errorMessage = methodPasser.exec(getValues());
+        String errorMessage;
+        if(isCreating){
+            errorMessage = methodPasser.exec(getValuesToAdd());
+        }else {
+            errorMessage = methodPasser.exec(getValuesToModify());
+        }
         if(errorMessage!=null){
             errorDisplay.setString(errorMessage);
             errorDisplay.displayErrorMessage();
@@ -116,7 +135,6 @@ public class AddElement {
     @FXML
     void cancel(ActionEvent event) {
         returnToParentWindow(event);
-
     }
 
     public void returnToParentWindow(ActionEvent event){
@@ -130,35 +148,16 @@ public class AddElement {
         this.parentWindow = parentWindow;
     }
 
-    public void setEditFields(ArrayList <String> fields, ArrayList<Integer> dateFields){
+    public void setEditFields(ArrayList <Parameter> parameters){
         editFields.getChildren().removeAll();
-        for(int i=0; i<fields.size(); i++){
-            editFields.add(new Label(fields.get(i)),0,i);
-            if(dateFields.contains(i)){
-                editFields.add(new DatePicker(),1,i);
-            }else {
-                editFields.add( new TextField(), 1, i);
+        for(int i=0; i<parameters.size(); i++){
+            editFields.add(parameters.get(i).getName(),0,i);
+            editFields.add(parameters.get(i).getValueField(),1,i);
+            if(parameters.get(i).getType() == Parameter.Type.textFieldWithChoice){
+                ((AnchorPane)editFields.getParent()).getChildren().add(parameters.get(i).getChoiceList());
             }
         }
-        editFields.setPrefHeight(fields.size()*30);
-    }
-
-    public void setEditFields(ArrayList <String> fields, ArrayList<Integer> dateFields, ArrayList<String> values){
-        editFields.getChildren().removeAll();
-        for(int i=0; i<fields.size(); i++){
-            editFields.add(new Label(fields.get(i)),0,i);
-            if(dateFields.contains(i)){
-                if(values.get(i).equals("")){
-                    editFields.add(new DatePicker(),1,i);
-                }else{
-                    String[] date = values.get(i).split("-");
-                    editFields.add(new DatePicker(LocalDate.of(Integer.parseInt(date[0]),Integer.parseInt(date[1]),Integer.parseInt(date[2]))),1,i);
-                }
-            }else {
-                editFields.add( new TextField(values.get(i)), 1, i);
-            }
-        }
-        editFields.setPrefHeight(fields.size()*30);
+        editFields.setPrefHeight(parameters.size()*30);
     }
 
     @FXML
@@ -167,5 +166,4 @@ public class AddElement {
         assert errorLabel != null : "fx:id=\"errorLabel\" was not injected: check your FXML file 'addElement.fxml'.";
         errorDisplay = new ErrorDisplay(errorLabel);
     }
-
 }

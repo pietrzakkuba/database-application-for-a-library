@@ -1,5 +1,6 @@
 package fxapp;
 
+import fxapp.containers.Parameter;
 import fxapp.editWindows.AddElement;
 import fxapp.editWindows.DeleteElement;
 import fxapp.editWindows.MethodPasser;
@@ -48,17 +49,15 @@ public class AffiliatesController extends Controller implements Initializable  {
 
     @FXML
     void add(ActionEvent event) {
-            Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
-            ArrayList<String> list = new ArrayList<>();
-            list.add("Address");
-            list.add("Opened from");
-            list.add("Opened till");
-
-            ArrayList<Integer> dateElements = new ArrayList<>();
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new fxapp.containers.Parameter("Address", fxapp.containers.Parameter.Type.textField,true, ""));
+        parameters.add(new fxapp.containers.Parameter("Opened from", fxapp.containers.Parameter.Type.textField,true, ""));
+        parameters.add(new fxapp.containers.Parameter("Opened till", fxapp.containers.Parameter.Type.textField,true, ""));
 
         try {
-            AddElement.startAdding(this,currentWindow, list, dateElements, DatabaseConnection::addAffiliates,"Add affiliate");
+            AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addAffiliates,"Add affiliate");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,24 +76,18 @@ public class AffiliatesController extends Controller implements Initializable  {
 
         // Item here is the table view type:
         AffiliatesTable item = mainTable.getItems().get(row);
-        ArrayList<String> values = new ArrayList<>();
-        values.add(Integer.toString(item.getId_number()));
-        values.add(item.getAddress());
-        values.add(Integer.toString(item.getOpening_hours_from()));
-        values.add(Integer.toString(item.getOpening_hours_to()));
-        values.add(Integer.toString(item.getNumber_of_employees()));
+
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new Parameter("Number", Parameter.Type.label,false,Integer.toString(item.getId_number())));
+        parameters.add(new Parameter("Address", Parameter.Type.label,false,item.getAddress()));
+        parameters.add(new Parameter("Opened from", Parameter.Type.label,false,Integer.toString(item.getOpening_hours_from())));
+        parameters.add(new Parameter("Opened till", Parameter.Type.label,false,Integer.toString(item.getOpening_hours_to())));
+        parameters.add(new Parameter("Number of employees", Parameter.Type.label,false,Integer.toString(item.getNumber_of_employees())));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Number");
-        list.add("Address");
-        list.add("Opened from");
-        list.add("Opened till");
-        list.add("Number of employees");
-
         try {
-            DeleteElement.startDeleting(item.getId_number(),this,currentWindow, list, values, DatabaseConnection::deleteAffiliates,"Delete affiliate");
+            DeleteElement.startDeleting(item.getId_number(),this,currentWindow, parameters, DatabaseConnection::deleteAffiliates,"Delete affiliate");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,25 +106,18 @@ public class AffiliatesController extends Controller implements Initializable  {
 
         // Item here is the table view type:
         AffiliatesTable item = mainTable.getItems().get(row);
-        ArrayList<String> values = new ArrayList<>();
-        values.add(item.getAddress());
-        values.add(Integer.toString(item.getOpening_hours_from()));
-        values.add(Integer.toString(item.getOpening_hours_to()));
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new fxapp.containers.Parameter("Address", fxapp.containers.Parameter.Type.textField,true, item.getAddress()));
+        parameters.add(new fxapp.containers.Parameter("Opened from", fxapp.containers.Parameter.Type.textField,true, Integer.toString(item.getOpening_hours_from())));
+        parameters.add(new fxapp.containers.Parameter("Opened till", fxapp.containers.Parameter.Type.textField,true, Integer.toString(item.getOpening_hours_to())));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
-
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Address");
-        list.add("Opened from");
-        list.add("Opened till");
-
-        ArrayList<Integer> dateElements = new ArrayList<>();
-
         try {
-            AddElement.startModifying(item.getId_number(),this,currentWindow, list, dateElements, values, DatabaseConnection::modifyAffiliates,"Add affiliate");
+            AddElement.startModifying(item.getId_number(),this,currentWindow, parameters, DatabaseConnection::modifyAffiliates,"Modify affiliate");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         currentWindow.hide();
     }
 

@@ -341,6 +341,69 @@ public class DatabaseConnection {
         return deleteStatement("Autorzy","id", id);
     }
 
+    public static String addBook(String[] values){
+        String FirstName = values[0], LastName = values[1], Pseudonym = values[2], Nationality = values[3], Date_of_birth = values[4], Date_of_death = values[5];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("IMIE","NAZWISKO"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(FirstName,LastName));
+        if(!(Pseudonym.equals("null") || Pseudonym.equals(""))){
+            fitFields.add("pseudonim");
+            fitValues.add(Pseudonym);
+            fitTypes.add(Types.string);
+        }
+        if(!(Date_of_birth.equals("null") || Date_of_birth.equals(""))){
+            fitFields.add("data_urodzin");
+            fitValues.add(Date_of_birth);
+            fitTypes.add(Types.date);
+        }
+        if(!(Date_of_death.equals("null") || Date_of_death.equals(""))){
+            fitFields.add("data_smierci");
+            fitValues.add(Date_of_death);
+            fitTypes.add(Types.date);
+        }
+        if(!(Nationality.equals("null") || Nationality.equals(""))){
+            fitFields.add("narodowosc");
+            fitValues.add(Nationality);
+            fitTypes.add(Types.string);
+        }
+        return insertStatement("Autorzy",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyBook(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String FirstName = values[0], LastName = values[1], Pseudonym = values[2], Nationality = values[3], Date_of_birth = values[4], Date_of_death = values[5];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("IMIE","NAZWISKO"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(FirstName,LastName));
+        if(!(Pseudonym.equals("null") || Pseudonym.equals(""))){
+            fitFields.add("pseudonim");
+            fitValues.add(Pseudonym);
+            fitTypes.add(Types.string);
+        }
+        if(!(Date_of_birth.equals("null") || Date_of_birth.equals(""))){
+            fitFields.add("data_urodzin");
+            fitValues.add(Date_of_birth);
+            fitTypes.add(Types.date);
+        }
+        if(!(Date_of_death.equals("null") || Date_of_death.equals(""))){
+            fitFields.add("data_smierci");
+            fitValues.add(Date_of_death);
+            fitTypes.add(Types.date);
+        }
+        if(!(Nationality.equals("null") || Nationality.equals(""))){
+            fitFields.add("narodowosc");
+            fitValues.add(Nationality);
+            fitTypes.add(Types.string);
+        }
+        return updateStatement("Ksiazki",fitFields,fitValues,fitTypes,"id",id);
+    }
+
+    public static String deleteBook(String[] values) {
+        String id = values[0];
+        return deleteStatement("Ksiazki","id", id);
+    }
+
     public static void loadEverything() throws SQLException {
         loadAffiliates();
         loadAuthors();

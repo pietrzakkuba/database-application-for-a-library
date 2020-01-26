@@ -1,5 +1,6 @@
 package fxapp;
 
+import fxapp.containers.Choice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,11 +24,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
+import sql.tables.BooksTable;
 import sql.tables.SectionsTable;
 
 import java.io.IOException;
 
-public class SectionsController implements Initializable {
+public class SectionsController extends Controller implements Initializable {
     public Button toMainMenuButton;
     public TableView<SectionsTable> mainTable;
     public TableColumn<SectionsTable, Integer> section_id;
@@ -37,11 +39,8 @@ public class SectionsController implements Initializable {
     public TableColumn<SectionsTable, String> affiliate_name;
     public TextField filter_text_box;
 
-    private ObservableList<SectionsTable> data;
-    private ArrayList<SectionsTable> filtered_data = new ArrayList<SectionsTable>();
-
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void reload() {
         try {
             DatabaseConnection.loadSections();
             data = FXCollections.observableArrayList(DatabaseConnection.getSectionsTableArrayList());
@@ -54,6 +53,25 @@ public class SectionsController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private static ObservableList<SectionsTable> data;
+    private ArrayList<SectionsTable> filtered_data = new ArrayList<SectionsTable>();
+
+    public static ArrayList<Choice> getMatchingRecords(String string){
+        ArrayList<Choice> matchingList = new ArrayList<>();
+        for (SectionsTable datum : data) {
+            if (datum.getToChoose().replaceAll("null", "").toLowerCase().contains(string.toLowerCase())) {
+                Choice choice = new Choice(datum.getSection_id(),datum.getToChoose().replaceAll("null", ""));
+                matchingList.add(choice);
+            }
+        }
+        return matchingList;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        reload();
     }
 
     @FXML

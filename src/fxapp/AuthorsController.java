@@ -70,7 +70,7 @@ public class AuthorsController extends Controller implements Initializable {
 
     @FXML
     void add(ActionEvent event) {
-        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+        /*Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
         ArrayList<String> list = new ArrayList<>();
         list.add("FirstName");
@@ -89,12 +89,12 @@ public class AuthorsController extends Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        currentWindow.hide();
+        currentWindow.hide();*/
     }
 
     @FXML
     void delete(ActionEvent event) {
-        TablePosition pos;
+        /*TablePosition pos;
         try {
             pos = mainTable.getSelectionModel().getSelectedCells().get(0);
         }catch (IndexOutOfBoundsException e){
@@ -138,12 +138,12 @@ public class AuthorsController extends Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        currentWindow.hide();
+        currentWindow.hide();*/
     }
 
     @FXML
     void modify(ActionEvent event) {
-        TablePosition pos;
+        /*TablePosition pos;
         try {
             pos = mainTable.getSelectionModel().getSelectedCells().get(0);
         }catch (IndexOutOfBoundsException e){
@@ -189,7 +189,7 @@ public class AuthorsController extends Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        currentWindow.hide();
+        currentWindow.hide();*/
     }
 
     public void toMainMenu(ActionEvent actionEvent) {

@@ -1,5 +1,8 @@
 package fxapp;
 
+import fxapp.containers.Parameter;
+import fxapp.editWindows.AddElement;
+import fxapp.editWindows.DeleteElement;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,26 +10,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
 import sql.tables.CopiesTable;
 
-public class CopiesController implements Initializable {
+public class CopiesController extends Controller implements Initializable {
     public Button toMainMenuButton;
     public TableView<CopiesTable> mainTable;
     public TableColumn<CopiesTable, Integer> copy_id;
@@ -43,7 +46,7 @@ public class CopiesController implements Initializable {
     private ArrayList<CopiesTable> filtered_data = new ArrayList<CopiesTable>();
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void reload() {
         try {
             DatabaseConnection.loadCopies();
             data = FXCollections.observableArrayList(DatabaseConnection.getCopiesTableArrayList());
@@ -61,6 +64,11 @@ public class CopiesController implements Initializable {
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        reload();
+    }
+
     public void toMainMenu(ActionEvent actionEvent) {
         Platform.runLater( () -> {
             try {
@@ -73,18 +81,94 @@ public class CopiesController implements Initializable {
 
     @FXML
     void add(ActionEvent event) {
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new fxapp.containers.Parameter("Book", Parameter.Type.textFieldWithChoice,true, ""));
+        parameters.get(parameters.size()-1).setChoicesGetMethod(BooksController::getMatchingRecords);
+        parameters.add(new fxapp.containers.Parameter("Cover's type", Parameter.Type.textField,false, ""));
+        parameters.add(new fxapp.containers.Parameter("Section and Affiliate", Parameter.Type.textFieldWithChoice,true, ""));
+        parameters.get(parameters.size()-1).setChoicesGetMethod(SectionsController::getMatchingRecords);
+        parameters.add(new fxapp.containers.Parameter("Release year", Parameter.Type.date,false, ""));
+        parameters.add(new fxapp.containers.Parameter("Release number", Parameter.Type.textField,false, ""));
+
+        try {
+            AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addAffiliates,"Add copy");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
+    }
+
+
+    @FXML
+    void modify(ActionEvent event) {
+        TablePosition pos;
+        try {
+            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        int row = pos.getRow();
+
+        // Item here is the table view type:
+        CopiesTable item = mainTable.getItems().get(row);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new fxapp.containers.Parameter("Book", Parameter.Type.textFieldWithChoice,true, item.getBook_title()));
+        parameters.get(parameters.size()-1).setChoicesGetMethod(BooksController::getMatchingRecords);
+        parameters.add(new fxapp.containers.Parameter("Availability", Parameter.Type.textField,true, String.valueOf(item.isAvailability())));
+        parameters.add(new fxapp.containers.Parameter("Cover's type", Parameter.Type.textField,false, item.getType_of_cover()));
+        parameters.add(new fxapp.containers.Parameter("Section and Affiliate", Parameter.Type.textFieldWithChoice,true, item.getSection() + ", " + item.getAffiliate()));
+        parameters.get(parameters.size()-1).setChoicesGetMethod(SectionsController::getMatchingRecords);
+        parameters.add(new fxapp.containers.Parameter("Release year", Parameter.Type.date,false, formatter.format(item.getRelease_year())));
+        parameters.add(new fxapp.containers.Parameter("Release number", Parameter.Type.textField,false,  Integer.toString(item.getRelease_number())));
+
+        try {
+            AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addAffiliates,"Add copy");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
     }
 
     @FXML
     void delete(ActionEvent event) {
+        TablePosition pos;
+        try {
+            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        int row = pos.getRow();
 
+        // Item here is the table view type:
+        CopiesTable item = mainTable.getItems().get(row);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new fxapp.containers.Parameter("Book", Parameter.Type.label,true, item.getBook_title()));
+        parameters.add(new fxapp.containers.Parameter("Availability", Parameter.Type.label,true, String.valueOf(item.isAvailability())));
+        parameters.add(new fxapp.containers.Parameter("Cover's type", Parameter.Type.label,false, item.getType_of_cover()));
+        parameters.add(new fxapp.containers.Parameter("Section and Affiliate", Parameter.Type.label,true, item.getSection() + ", " + item.getAffiliate()));
+        parameters.add(new fxapp.containers.Parameter("Release year", Parameter.Type.label,false, formatter.format(item.getRelease_year())));
+        parameters.add(new fxapp.containers.Parameter("Release number", Parameter.Type.label,false,  Integer.toString(item.getRelease_number())));
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        try {
+            DeleteElement.startDeleting(item.getCopy_id(),this,currentWindow, parameters, DatabaseConnection::deleteBook,"Delete book");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
     }
 
-    @FXML
-    void modify(ActionEvent event) {
-
-    }
 
     public void filtering(KeyEvent onKeyReleased) {
         filtered_data.clear();

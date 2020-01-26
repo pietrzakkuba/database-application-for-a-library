@@ -21,6 +21,10 @@ public class BooksTable {
         return String.format("%d %s %s %s %d %d", this.id, this.title, this.author_first_name, this.author_last_name, this.number_of_copies, this.number_of_orders);
     }
 
+    public String getToChoose() {
+        return String.format("%s, %s %s", this.title, this.author_first_name, this.author_last_name);
+    }
+
     public int getId() {
         return id;
     }

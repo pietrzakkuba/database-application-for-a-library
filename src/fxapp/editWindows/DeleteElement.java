@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import fxapp.Controller;
+import fxapp.containers.Parameter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,9 +47,9 @@ public class DeleteElement {
         return (Stage)editFields.getScene().getWindow();
     }
 
-    public static void startDeleting(int id, Controller parentController, Stage currentStage, ArrayList<String> elements, ArrayList<String> values, MethodPasser methodPasser, String title) throws IOException {
+    public static void startDeleting(int id, Controller parentController, Stage currentStage, ArrayList<Parameter> parameters, MethodPasser methodPasser, String title) throws IOException {
         DeleteElement controller = createStage(currentStage,title);
-        controller.setFields(elements,values);
+        controller.setFields(parameters);
         controller.getStage().show();
         controller.methodPasser = methodPasser;
         controller.parentController = parentController;
@@ -63,13 +64,12 @@ public class DeleteElement {
         this.parentWindow = parentWindow;
     }
 
-    private void setFields(ArrayList<String> elements, ArrayList<String> values){
-        editFields.getChildren().removeAll();
-        for(int i = 0; i<elements.size(); i++){
-            editFields.add(new Label(elements.get(i)),0,i);
-            editFields.add(new Label(values.get(i)),1,i);
+    private void setFields(ArrayList<Parameter> parameters){
+        for(int i = 0; i<parameters.size(); i++){
+            editFields.add(parameters.get(i).getName(),0,i);
+            editFields.add(parameters.get(i).getValueField(),1,i);
         }
-        editFields.setPrefHeight(elements.size()*30);
+        editFields.setPrefHeight(parameters.size()*30);
     }
 
     public static DeleteElement createStage(Stage parentWindow,String title) throws IOException {
