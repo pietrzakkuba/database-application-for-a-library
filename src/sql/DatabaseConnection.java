@@ -590,7 +590,7 @@ public class DatabaseConnection {
         if (copiesTableArrayList.size() > 0) {
             copiesTableArrayList.clear();
         }
-        String query =  "select e.numer, k.tytul, e.dostepnosc, d.nazwa, f.adres, e.wydanie, e.rok_wydania, e.rodzaj_okladki, k.id as book_id, d.id as section_id" +
+        String query =  "select e.numer, k.tytul, e.dostepnosc, d.nazwa, f.adres, e.wydanie, e.rok_wydania, e.rodzaj_okladki, k.id as book_id, d.id as section_id " +
                         "from egzemplarze e " +
                         "inner join ksiazki k " +
                         "on e.id_ksiazki = k.id " +
