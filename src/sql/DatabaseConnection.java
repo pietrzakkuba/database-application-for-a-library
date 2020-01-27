@@ -431,10 +431,15 @@ public class DatabaseConnection {
     public static String modifyCopy(String[] values){
         String id = values[0];
         values = Arrays.copyOfRange(values, 1, values.length);
-        String BookID = values[0], SectionID = values[1], CoversType = values[2], ReleaseYear = values[3], RealaseNumber = values[4];
-        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu"));
-        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value));
-        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID));
+        String BookID = values[0], SectionID = values[1], isAvailable = values[2], CoversType = values[3], ReleaseYear = values[4], RealaseNumber = values[5];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu","dostepnosc"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.value));
+        if(isAvailable.equals("true")){
+            isAvailable = "1";
+        }else{
+            isAvailable = "0";
+        }
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID,isAvailable));
         if(!(CoversType.equals("null") || CoversType.equals(""))){
             fitFields.add("rodzaj_okladki");
             fitValues.add(CoversType);
