@@ -5,15 +5,16 @@ import java.sql.Date;
 public class CopiesTable {
     private int copy_id;
     private String book_title;
-    private int book_id;
     private boolean availability;
     private String section;
     private String affiliate;
     private int release_number;
     private Date release_year;
     private String type_of_cover;
+    private int book_id;
+    private int section_id;
 
-    public CopiesTable(int copy_id, String book_title, boolean availability, String section, String affiliate, int release_number, Date release_year, String type_of_cover) {
+    public CopiesTable(int copy_id, String book_title, boolean availability, String section, String affiliate, int release_number, Date release_year, String type_of_cover, int book_id, int section_id) {
         this.copy_id = copy_id;
         this.book_title = book_title;
         this.availability = availability;
@@ -22,6 +23,24 @@ public class CopiesTable {
         this.release_number = release_number;
         this.release_year = release_year;
         this.type_of_cover = type_of_cover;
+        this.book_id = book_id;
+        this.section_id = section_id;
+    }
+
+    public int getSection_id() {
+        return section_id;
+    }
+
+    public void setSection_id(int section_id) {
+        this.section_id = section_id;
+    }
+
+    public int getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(int book_id) {
+        this.book_id = book_id;
     }
 
     public String getAll() {

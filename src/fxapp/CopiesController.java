@@ -103,33 +103,33 @@ public class CopiesController extends Controller implements Initializable {
 
     @FXML
     void modify(ActionEvent event) {
-        TablePosition pos;
-        try {
-            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
-        }catch (IndexOutOfBoundsException e){
-            return;
-        }
-        int row = pos.getRow();
-
-        // Item here is the table view type:
-        CopiesTable item = mainTable.getItems().get(row);
-
-        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
-
-        ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldWithChoiceParameter("Book",true, BooksController::getMatchingRecords, item.getBook_title(), item.get()));
-        parameters.add(new TextFieldParameter("Availability", true, String.valueOf(item.isAvailability())));
-        parameters.add(new TextFieldWithChoiceParameter("Section and Affiliate",true, SectionsController::getMatchingRecords, item.getSection() + ", " + item.getAffiliate(), item.getCopy_id()));
-        parameters.add(new TextFieldParameter("Cover's type",false, item.getType_of_cover()));
-        parameters.add(new DateParameter("Release year",false, item.getRelease_year()));
-        parameters.add(new TextFieldParameter("Release number",false, Integer.toString(item.getRelease_number())));
-
-        try {
-            AddElement.startModifying(item.getCopy_id(),this,currentWindow, parameters, DatabaseConnection::modifyCopy,"Modify copy");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        currentWindow.hide();
+//        TablePosition pos;
+//        try {
+//            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+//        }catch (IndexOutOfBoundsException e){
+//            return;
+//        }
+//        int row = pos.getRow();
+//
+//        // Item here is the table view type:
+//        CopiesTable item = mainTable.getItems().get(row);
+//
+//        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+//
+//        ArrayList<Parameter> parameters = new ArrayList<>();
+//        parameters.add(new TextFieldWithChoiceParameter("Book",true, BooksController::getMatchingRecords, item.getBook_title(), item.get()));
+//        parameters.add(new TextFieldParameter("Availability", true, String.valueOf(item.isAvailability())));
+//        parameters.add(new TextFieldWithChoiceParameter("Section and Affiliate",true, SectionsController::getMatchingRecords, item.getSection() + ", " + item.getAffiliate(), item.getCopy_id()));
+//        parameters.add(new TextFieldParameter("Cover's type",false, item.getType_of_cover()));
+//        parameters.add(new DateParameter("Release year",false, item.getRelease_year()));
+//        parameters.add(new TextFieldParameter("Release number",false, Integer.toString(item.getRelease_number())));
+//
+//        try {
+//            AddElement.startModifying(item.getCopy_id(),this,currentWindow, parameters, DatabaseConnection::modifyCopy,"Modify copy");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        currentWindow.hide();
     }
 
     @FXML
