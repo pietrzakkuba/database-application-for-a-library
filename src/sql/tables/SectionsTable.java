@@ -20,7 +20,7 @@ public class SectionsTable {
     }
 
     public String getToChoose() {
-        return String.format("%s %s, %s", this.section_id, this.section_name, this.section_short_name, this.affiliate_name);
+        return String.format("%s %s, %s", this.section_name, this.section_short_name, this.affiliate_name);
     }
 
     public int getSection_id() {

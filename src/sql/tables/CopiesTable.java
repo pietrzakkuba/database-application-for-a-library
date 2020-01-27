@@ -5,6 +5,7 @@ import java.sql.Date;
 public class CopiesTable {
     private int copy_id;
     private String book_title;
+    private int book_id;
     private boolean availability;
     private String section;
     private String affiliate;

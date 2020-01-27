@@ -404,6 +404,60 @@ public class DatabaseConnection {
         return deleteStatement("Ksiazki","id", id);
     }
 
+    public static String addCopy(String[] values){
+        String BookID = values[0],  SectionID = values[1], CoversType = values[2], ReleaseYear = values[3], RealaseNumber = values[4];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID));
+        if(!(CoversType.equals("null") || CoversType.equals(""))){
+            fitFields.add("rodzaj_okladki");
+            fitValues.add(CoversType);
+            fitTypes.add(Types.string);
+        }
+        if(!(ReleaseYear.equals("null") || ReleaseYear.equals(""))){
+            fitFields.add("rok_wydania");
+            fitValues.add(ReleaseYear);
+            fitTypes.add(Types.date);
+        }
+        if(!(RealaseNumber.equals("null") || RealaseNumber.equals(""))){
+            fitFields.add("wydanie");
+            fitValues.add(RealaseNumber);
+            fitTypes.add(Types.value);
+        }
+
+        return insertStatement("Egzemplarze",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyCopy(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String BookID = values[0], SectionID = values[1], CoversType = values[2], ReleaseYear = values[3], RealaseNumber = values[4];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID));
+        if(!(CoversType.equals("null") || CoversType.equals(""))){
+            fitFields.add("rodzaj_okladki");
+            fitValues.add(CoversType);
+            fitTypes.add(Types.string);
+        }
+        if(!(ReleaseYear.equals("null") || ReleaseYear.equals(""))){
+            fitFields.add("rok_wydania");
+            fitValues.add(ReleaseYear);
+            fitTypes.add(Types.date);
+        }
+        if(!(RealaseNumber.equals("null") || RealaseNumber.equals(""))){
+            fitFields.add("wydanie");
+            fitValues.add(RealaseNumber);
+            fitTypes.add(Types.value);
+        }
+        return updateStatement("Egzemplarze",fitFields,fitValues,fitTypes,"numer",id);
+    }
+
+    public static String deleteCopy(String[] values) {
+        String id = values[0];
+        return deleteStatement("Egzemplarze","numer", id);
+    }
+
     public static void loadEverything() throws SQLException {
         loadAffiliates();
         loadAuthors();

@@ -2,6 +2,8 @@ package fxapp.editWindows;
 
 import fxapp.Controller;
 import fxapp.containers.Parameter;
+import fxapp.containers.TextFieldParameter;
+import fxapp.containers.TextFieldWithChoiceParameter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,41 +75,33 @@ public class AddElement {
         return (Stage)editFields.getScene().getWindow();
     }
 
-    private String[] getValuesToModify(){
+    class requiredParameterException extends Exception{
+        public requiredParameterException(String paramName) {
+            super("Parameter \"" + paramName + "\" is required");
+        }
+    }
+
+    private String[] getValuesToModify() throws requiredParameterException {
         String[] values = new String[parameters.size()+1];
         values[0] = Integer.toString(recordsID);
         for(int i=1; i<values.length; i++){
-            Parameter.Type type = parameters.get(i-1).getType();
-            if(type == Parameter.Type.textField){
-                values[i] = ((TextField)parameters.get(i-1).getValueField()).getText();
-            }else if(type == Parameter.Type.textFieldWithChoice){
-                if(parameters.get(i-1).getChosenID() == null){
-                    values[i] = "";
-                }else {
-                    values[i] = Integer.toString(parameters.get(i-1).getChosenID());
-                }
-            }else if(type == Parameter.Type.date){
-                values[i] = ((DatePicker)parameters.get(i-1).getValueField()).getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            Parameter parameter = parameters.get(i-1);
+            if(parameter.isRequired() && (parameter.valueToString()==null || parameter.valueToString().equals(""))){
+                throw new requiredParameterException(parameter.getName().getText());
             }
+            values[i] = parameter.valueToString();
         }
         return values;
     }
 
-    private String[] getValuesToAdd(){
+    private String[] getValuesToAdd() throws requiredParameterException {
         String[] values = new String[parameters.size()];
         for(int i=0; i<values.length; i++){
-            Parameter.Type type = parameters.get(i).getType();
-            if(type == Parameter.Type.textField){
-                values[i] = ((TextField)parameters.get(i).getValueField()).getText();
-            }else if(type == Parameter.Type.textFieldWithChoice){
-                if(parameters.get(i).getChosenID() == null){
-                    values[i] = "";
-                }else {
-                    values[i] = Integer.toString(parameters.get(i).getChosenID());
-                }
-            }else if(type == Parameter.Type.date){
-                values[i] = ((DatePicker)parameters.get(i).getValueField()).getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            Parameter parameter = parameters.get(i);
+            if(parameter.isRequired() && (parameter.valueToString()==null || parameter.valueToString().equals(""))){
+                throw new requiredParameterException(parameter.getName().getText());
             }
+            values[i] = parameter.valueToString();
         }
         return values;
     }
@@ -117,12 +111,19 @@ public class AddElement {
 
     @FXML
     void add(ActionEvent event) {
-        String errorMessage;
-        if(isCreating){
-            errorMessage = methodPasser.exec(getValuesToAdd());
-        }else {
-            errorMessage = methodPasser.exec(getValuesToModify());
+        String errorMessage = null;
+        try{
+            if(isCreating){
+                errorMessage = methodPasser.exec(getValuesToAdd());
+            }else {
+                errorMessage = methodPasser.exec(getValuesToModify());
+            }
+        }catch (requiredParameterException e) {
+            errorDisplay.setString(e.getMessage());
+            errorDisplay.displayErrorMessage();
+            return;
         }
+
         if(errorMessage!=null){
             errorDisplay.setString(errorMessage);
             errorDisplay.displayErrorMessage();
@@ -154,7 +155,7 @@ public class AddElement {
             editFields.add(parameters.get(i).getName(),0,i);
             editFields.add(parameters.get(i).getValueField(),1,i);
             if(parameters.get(i).getType() == Parameter.Type.textFieldWithChoice){
-                ((AnchorPane)editFields.getParent()).getChildren().add(parameters.get(i).getChoiceList());
+                ((AnchorPane)editFields.getParent()).getChildren().add(((TextFieldWithChoiceParameter)parameters.get(i)).getChoiceList());
             }
         }
         editFields.setPrefHeight(parameters.size()*30);

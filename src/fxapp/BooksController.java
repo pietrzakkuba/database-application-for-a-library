@@ -54,11 +54,15 @@ public class BooksController extends Controller implements Initializable {
         return matchingList;
     }
 
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadBooks();
+        data = FXCollections.observableArrayList(DatabaseConnection.getBooksTableArrayList());
+    }
+
     @Override
     public void reload() {
         try {
-            DatabaseConnection.loadBooks();
-            data = FXCollections.observableArrayList(DatabaseConnection.getBooksTableArrayList());
+            loadToArray();
             id.setCellValueFactory(new PropertyValueFactory<BooksTable, Integer>("id"));
             title.setCellValueFactory(new PropertyValueFactory<BooksTable, String>("title"));
             author_first_name.setCellValueFactory(new PropertyValueFactory<BooksTable, String>("author_first_name"));

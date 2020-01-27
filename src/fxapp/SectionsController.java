@@ -39,17 +39,21 @@ public class SectionsController extends Controller implements Initializable {
     public TableColumn<SectionsTable, String> affiliate_name;
     public TextField filter_text_box;
 
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadSections();
+        data = FXCollections.observableArrayList(DatabaseConnection.getSectionsTableArrayList());
+    }
+
     @Override
     public void reload() {
-        try {
-            DatabaseConnection.loadSections();
-            data = FXCollections.observableArrayList(DatabaseConnection.getSectionsTableArrayList());
-            section_id.setCellValueFactory(new PropertyValueFactory<SectionsTable, Integer>("section_id"));
-            section_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("section_name"));
-            section_short_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("section_short_name"));
-            number_of_books.setCellValueFactory(new PropertyValueFactory<SectionsTable, Integer>("number_of_books"));
-            affiliate_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("affiliate_name"));
-            mainTable.setItems(data);
+        try{
+        loadToArray();
+        section_id.setCellValueFactory(new PropertyValueFactory<SectionsTable, Integer>("section_id"));
+        section_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("section_name"));
+        section_short_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("section_short_name"));
+        number_of_books.setCellValueFactory(new PropertyValueFactory<SectionsTable, Integer>("number_of_books"));
+        affiliate_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("affiliate_name"));
+        mainTable.setItems(data);
         } catch (SQLException e) {
             e.printStackTrace();
         }
