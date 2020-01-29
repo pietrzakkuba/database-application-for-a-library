@@ -11,8 +11,9 @@ public class CheckOutsTable {
     private Date check_out_date;
     private int check_out_period;
     private Date return_date;
+    private int reader_id;
 
-    public CheckOutsTable(int checkout_id, String reader_first_name, String reader_last_name, String book_title, int copy_id, Date check_out_date, int check_out_period, Date return_date) {
+    public CheckOutsTable(int checkout_id, String reader_first_name, String reader_last_name, String book_title, int copy_id, Date check_out_date, int check_out_period, Date return_date, int reader_id) {
         this.checkout_id = checkout_id;
         this.reader_first_name = reader_first_name;
         this.reader_last_name = reader_last_name;
@@ -21,10 +22,15 @@ public class CheckOutsTable {
         this.check_out_date = check_out_date;
         this.check_out_period = check_out_period;
         this.return_date = return_date;
+        this.reader_id = reader_id;
     }
 
     public String getAll() {
         return String.format("%d %s %s %s %d %s %d %s", this.checkout_id, this.reader_first_name, this.reader_last_name, this.book_title, this.copy_id, this.check_out_date, this.check_out_period, this.return_date);
+    }
+
+    public int getReader_id() {
+        return reader_id;
     }
 
     public int getCheckout_id() {

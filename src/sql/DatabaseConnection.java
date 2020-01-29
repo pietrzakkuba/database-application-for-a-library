@@ -5,6 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fxapp.AffiliatesController;
+import fxapp.CopiesController;
+import fxapp.PositionsController;
+import fxapp.ReadersController;
+import fxapp.containers.DateParameter;
+import fxapp.containers.Parameter;
+import fxapp.containers.TextFieldParameter;
+import fxapp.containers.TextFieldWithChoiceParameter;
 import sql.tables.*;
 
 public class DatabaseConnection {
@@ -342,60 +350,22 @@ public class DatabaseConnection {
     }
 
     public static String addBook(String[] values){
-        String FirstName = values[0], LastName = values[1], Pseudonym = values[2], Nationality = values[3], Date_of_birth = values[4], Date_of_death = values[5];
-        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("IMIE","NAZWISKO"));
-        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string));
-        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(FirstName,LastName));
-        if(!(Pseudonym.equals("null") || Pseudonym.equals(""))){
-            fitFields.add("pseudonim");
-            fitValues.add(Pseudonym);
-            fitTypes.add(Types.string);
-        }
-        if(!(Date_of_birth.equals("null") || Date_of_birth.equals(""))){
-            fitFields.add("data_urodzin");
-            fitValues.add(Date_of_birth);
-            fitTypes.add(Types.date);
-        }
-        if(!(Date_of_death.equals("null") || Date_of_death.equals(""))){
-            fitFields.add("data_smierci");
-            fitValues.add(Date_of_death);
-            fitTypes.add(Types.date);
-        }
-        if(!(Nationality.equals("null") || Nationality.equals(""))){
-            fitFields.add("narodowosc");
-            fitValues.add(Nationality);
-            fitTypes.add(Types.string);
-        }
-        return insertStatement("Autorzy",fitFields,fitValues,fitTypes);
+        String Title = values[0], Author_ID = values[1];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("tytul","id_autora"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(Title,Author_ID));
+
+        return insertStatement("Ksiazki",fitFields,fitValues,fitTypes);
     }
 
     public static String modifyBook(String[] values){
         String id = values[0];
         values = Arrays.copyOfRange(values, 1, values.length);
-        String FirstName = values[0], LastName = values[1], Pseudonym = values[2], Nationality = values[3], Date_of_birth = values[4], Date_of_death = values[5];
-        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("IMIE","NAZWISKO"));
-        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string));
-        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(FirstName,LastName));
-        if(!(Pseudonym.equals("null") || Pseudonym.equals(""))){
-            fitFields.add("pseudonim");
-            fitValues.add(Pseudonym);
-            fitTypes.add(Types.string);
-        }
-        if(!(Date_of_birth.equals("null") || Date_of_birth.equals(""))){
-            fitFields.add("data_urodzin");
-            fitValues.add(Date_of_birth);
-            fitTypes.add(Types.date);
-        }
-        if(!(Date_of_death.equals("null") || Date_of_death.equals(""))){
-            fitFields.add("data_smierci");
-            fitValues.add(Date_of_death);
-            fitTypes.add(Types.date);
-        }
-        if(!(Nationality.equals("null") || Nationality.equals(""))){
-            fitFields.add("narodowosc");
-            fitValues.add(Nationality);
-            fitTypes.add(Types.string);
-        }
+        String Title = values[0], Author_ID = values[1];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("tytul","id_autora"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(Title,Author_ID));
+
         return updateStatement("Ksiazki",fitFields,fitValues,fitTypes,"id",id);
     }
 
@@ -463,6 +433,72 @@ public class DatabaseConnection {
         return deleteStatement("Egzemplarze","numer", id);
     }
 
+    public static String addCheckout(String[] values){
+        String Copy_ID = values[0],  Reader_ID = values[1], Date_of_checkout = values[2], Rented_for = values[3], Date_of_return = values[4];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_egzemplarza","id_czytelnika","data_wypozyczenia", "termin_zwrotu"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.date,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(Copy_ID,Reader_ID,Date_of_checkout,Rented_for));
+        if(!(Date_of_return.equals("null") || Date_of_return.equals(""))){
+            fitFields.add("data_zwrotu");
+            fitValues.add(Date_of_return);
+            fitTypes.add(Types.date);
+        }
+        return insertStatement("Wypozyczenia",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyCheckout(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String Copy_ID = values[0],  Reader_ID = values[1], Date_of_checkout = values[2], Rented_for = values[3], Date_of_return = values[4];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_egzemplarza","id_czytelnika","data_wypozyczenia", "termin_zwrotu"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.date,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(Copy_ID,Reader_ID,Date_of_checkout,Rented_for));
+        if(!(Date_of_return.equals("null") || Date_of_return.equals(""))){
+            fitFields.add("data_zwrotu");
+            fitValues.add(Date_of_return);
+            fitTypes.add(Types.date);
+        }
+        return updateStatement("Wypozyczenia",fitFields,fitValues,fitTypes,"id_wypozyczenia",id);
+    }
+
+    public static String deleteCheckout(String[] values) {
+        String id = values[0];
+        return deleteStatement("Wypozyczenia","id_wypozyczenia", id);
+    }
+
+    public static String addEmployee(String[] values){
+        String First = values[0],  Last = values[1], Employment_date = values[2], Affiliate = values[3], Position = values[4], Hourly_rate = values[5], Date_of_signing = values[6], Date_of_end = values[7];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("imie","nazwisko","data_zatrudnienia", "id_filii", "id_stanowiska", "stawka_godzinowa", "data_podpisania_ostatniej_umowy"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.date,Types.value,Types.value, Types.value, Types.date));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(First,Last,Employment_date,Affiliate,Position,Hourly_rate,Date_of_signing));
+        if(!(Date_of_end.equals("null") || Date_of_end.equals(""))){
+            fitFields.add("data_wygasniecia_umowy");
+            fitValues.add(Date_of_end);
+            fitTypes.add(Types.date);
+        }
+        return insertStatement("Pracownicy",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyEmployee(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String First = values[0],  Last = values[1], Employment_date = values[2], Affiliate = values[3], Position = values[4], Hourly_rate = values[5], Date_of_signing = values[6], Date_of_end = values[7];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("imie","nazwisko","data_zatrudnienia", "id_filii", "id_stanowiska", "stawka_godzinowa", "data_podpisania_ostatniej_umowy"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.date,Types.value,Types.value, Types.value, Types.date));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(First,Last,Employment_date,Affiliate,Position,Hourly_rate,Date_of_signing));
+        if(!(Date_of_end.equals("null") || Date_of_end.equals(""))){
+            fitFields.add("data_wygasniecia_umowy");
+            fitValues.add(Date_of_end);
+            fitTypes.add(Types.date);
+        }
+        return updateStatement("Pracownicy",fitFields,fitValues,fitTypes,"id",id);
+    }
+
+    public static String deleteEmployee(String[] values) {
+        String id = values[0];
+        return deleteStatement("Pracownicy","id", id);
+    }
+
     public static void loadEverything() throws SQLException {
         loadAffiliates();
         loadAuthors();
@@ -506,8 +542,6 @@ public class DatabaseConnection {
         }
     }
 
-
-
     public static void loadAuthors() throws SQLException {
         if (authorsTableArrayList.size() > 0) {
             authorsTableArrayList.clear();
@@ -534,17 +568,15 @@ public class DatabaseConnection {
         if (booksTableArrayList.size() > 0) {
             booksTableArrayList.clear();
         }
-        String query =  "select k.id, k.tytul, a.imie, a.nazwisko, count(e.numer), count(z.id_zamowienia) " +
+        String query =  "select k.id, k.tytul, a.imie, a.nazwisko, count(e.numer), count(z.id), a.ID " +
                         "from ksiazki k " +
-                        "inner join wspolautorzy w " +
-                        "on w.id_ksiazki = k.id " +
                         "inner join autorzy a " +
-                        "on a.id = w.id_autora " +
+                        "on a.id = k.id_autora " +
                         "left join egzemplarze e " +
                         "on e.id_ksiazki = k.id " +
-                        "left join pozycja_zamowienia z " +
+                        "left join zamowienia z " +
                         "on z.id_ksiazki = k.id " +
-                        "group by(k.id, k.tytul, a.imie, a.nazwisko)";
+                        "group by(k.id, k.tytul, a.imie, a.nazwisko, a.ID, z.id)";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
@@ -555,7 +587,8 @@ public class DatabaseConnection {
                             resultSet.getString(3),
                             resultSet.getString(4),
                             resultSet.getInt(5),
-                            resultSet.getInt(6)
+                            resultSet.getInt(6),
+                            resultSet.getInt(7)
                     ));
         }
     }
@@ -563,14 +596,12 @@ public class DatabaseConnection {
         if (checkOutsTableArrayList.size() > 0) {
             checkOutsTableArrayList.clear();
         }
-        String query =  "select w.id_wypozyczenia, c.imie, c.nazwisko, k.tytul, e.numer, w.data_wypozyczenia, w.termin_zwrotu, w.data_zwrotu " +
+        String query =  "select w.id_wypozyczenia, c.imie, c.nazwisko, k.tytul, e.numer, w.data_wypozyczenia, w.termin_zwrotu, w.data_zwrotu, c.ID " +
                         "from wypozyczenia w " +
-                        "inner join czytelnicy c " +
+                        "left join czytelnicy c " +
                         "on c.id = w.id_czytelnika " +
-                        "inner join pozycja_wypozyczenia pw " +
-                        "on pw.id_egzemplarza = w.id_wypozyczenia " +
                         "inner join egzemplarze e " +
-                        "on e.numer = pw.id_egzemplarza " +
+                        "on e.numer = w.id_egzemplarza " +
                         "inner join ksiazki k " +
                         "on e.id_ksiazki = k.id";
         Statement statement = connection.createStatement();
@@ -585,7 +616,8 @@ public class DatabaseConnection {
                             resultSet.getInt(5),
                             resultSet.getDate(6),
                             resultSet.getInt(7),
-                            resultSet.getDate(8)
+                            resultSet.getDate(8),
+                            resultSet.getInt(9)
                     ));
         }
     }
@@ -625,14 +657,16 @@ public class DatabaseConnection {
         if (employeesTableArrayList.size() > 0) {
             employeesTableArrayList.clear();
         }
-        String query =  "select p.id, p.imie, p.nazwisko, p.stanowisko, f.adres, p.data_zatrudnienia, p.data_podpisania_ostatniej_umowy, p.data_wygasniecia_umowy, p.stawka_godzinowa " +
+        String query =  "select p.id, p.imie, p.nazwisko, s.NAZWA, f.adres, p.data_zatrudnienia, p.data_podpisania_ostatniej_umowy, p.data_wygasniecia_umowy, p.stawka_godzinowa, f.NUMER, p.id_stanowiska " +
                         "from pracownicy p " +
                         "inner join jednostka_pracy jp " +
                         "on jp.id_pracownika = p.id " +
                         "inner join grafik_dyzurow gd " +
                         "on gd.id = jp.id_grafiku " +
                         "inner join filie f " +
-                        "on f.numer = gd.numer_filii";
+                        "on f.numer = gd.numer_filii " +
+                        "inner join STANOWISKA s " +
+                        "on p.ID = s.ID";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
@@ -646,7 +680,9 @@ public class DatabaseConnection {
                             resultSet.getDate(6),
                             resultSet.getDate(7),
                             resultSet.getDate(8),
-                            resultSet.getDouble(9)
+                            resultSet.getDouble(9),
+                            resultSet.getInt(10),
+                            resultSet.getInt(11)
                     ));
         }
     }
@@ -659,10 +695,8 @@ public class DatabaseConnection {
                         "from zamowienia z " +
                         "inner join czytelnicy c " +
                         "on c.id = z.id_czytelnika " +
-                        "inner join pozycja_zamowienia pz " +
-                        "on pz.id_zamowienia = z.id " +
                         "inner join ksiazki k " +
-                        "on k.id = pz.id_ksiazki";
+                        "on k.id = z.id_ksiazki";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
@@ -681,11 +715,11 @@ public class DatabaseConnection {
         if (positionsTableArrayList.size() > 0) {
             positionsTableArrayList.clear();
         }
-        String query =  "select s.nazwa, s.minimalna_stawka_godzinowa, count(p.id) " +
+        String query =  "select s.nazwa, s.minimalna_stawka_godzinowa, count(p.ID), s.id " +
                         "from stanowiska s " +
                         "left join pracownicy p " +
-                        "on p.stanowisko = s.nazwa " +
-                        "group by(s.nazwa, s.minimalna_stawka_godzinowa)";
+                        "on s.id = p.ID_STANOWISKA " +
+                        "group by(s.id, s.nazwa, s.minimalna_stawka_godzinowa)";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
@@ -693,7 +727,8 @@ public class DatabaseConnection {
                     new PositionsTable(
                             resultSet.getString(1),
                             resultSet.getDouble(2),
-                            resultSet.getInt(3)
+                            resultSet.getInt(3),
+                            resultSet.getInt(4)
                     ));
         }
     }

@@ -23,6 +23,10 @@ public class ReadersTable {
         return String.format("%d %s %s %s %s %d", this.id, this.first_name, this.last_name, this.year_of_birth, this.date_of_signing_in, this.number_of_borrowed_books);
     }
 
+    public String getToChoose() {
+        return String.format("%d %s %s %s", this.id, this.first_name, this.last_name, this.year_of_birth, this.date_of_signing_in, this.number_of_borrowed_books);
+    }
+
     public int getId() {
         return id;
     }

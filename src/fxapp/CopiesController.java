@@ -27,6 +27,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
+import sql.tables.BooksTable;
 import sql.tables.CopiesTable;
 
 public class CopiesController extends Controller implements Initializable {
@@ -43,16 +44,31 @@ public class CopiesController extends Controller implements Initializable {
     public TextField filter_text_box;
     public Button returnCopyButton;
 
-    private ObservableList<CopiesTable> data;
+    private static ObservableList<CopiesTable> data;
     private ArrayList<CopiesTable> filtered_data = new ArrayList<CopiesTable>();
+
+    public static ArrayList<Choice> getMatchingRecords(String string){
+        ArrayList<Choice> matchingList = new ArrayList<>();
+        for (CopiesTable datum : data) {
+            if (datum.getToChoose().replaceAll("null", "").toLowerCase().contains(string.toLowerCase())) {
+                Choice choice = new Choice(datum.getCopy_id(),datum.getToChoose().replaceAll("null", ""));
+                matchingList.add(choice);
+            }
+        }
+        return matchingList;
+    }
+
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadCopies();
+        data = FXCollections.observableArrayList(DatabaseConnection.getCopiesTableArrayList());
+    }
 
     @Override
     public void reload() {
         try {
-            DatabaseConnection.loadCopies();
             BooksController.loadToArray();
             SectionsController.loadToArray();
-            data = FXCollections.observableArrayList(DatabaseConnection.getCopiesTableArrayList());
+            loadToArray();
             copy_id.setCellValueFactory(new PropertyValueFactory<CopiesTable, Integer>("copy_id"));
             book_title.setCellValueFactory(new PropertyValueFactory<CopiesTable, String>("book_title"));
             availability.setCellValueFactory(new PropertyValueFactory<CopiesTable, Boolean>("availability"));
@@ -146,14 +162,12 @@ public class CopiesController extends Controller implements Initializable {
         // Item here is the table view type:
         CopiesTable item = mainTable.getItems().get(row);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new LabelParameter("Book", item.getBook_title()));
         parameters.add(new LabelParameter("Availability", String.valueOf(item.isAvailability())));
         parameters.add(new LabelParameter("Cover's type", item.getType_of_cover()));
         parameters.add(new LabelParameter("Section and Affiliate", item.getSection() + ", " + item.getAffiliate()));
-        parameters.add(new LabelParameter("Release year", formatter.format(item.getRelease_year())));
+        parameters.add(new LabelParameter("Release year", item.getRelease_year()));
         parameters.add(new LabelParameter("Release number",  Integer.toString(item.getRelease_number())));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
@@ -165,7 +179,6 @@ public class CopiesController extends Controller implements Initializable {
         }
         currentWindow.hide();
     }
-
 
     public void filtering(KeyEvent onKeyReleased) {
         filtered_data.clear();

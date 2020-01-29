@@ -1,5 +1,6 @@
 package fxapp;
 
+import fxapp.containers.Choice;
 import fxapp.containers.LabelParameter;
 import fxapp.containers.Parameter;
 import fxapp.containers.TextFieldParameter;
@@ -35,6 +36,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
+import sql.tables.AuthorsTable;
 
 public class AffiliatesController extends Controller implements Initializable  {
     public Button toMainMenuButton;
@@ -46,7 +48,7 @@ public class AffiliatesController extends Controller implements Initializable  {
     public TableColumn<AffiliatesTable, Integer> number_of_employees;
     public TextField filter_text_box;
 
-    private ObservableList<AffiliatesTable> data;
+    private static ObservableList<AffiliatesTable> data;
     private ArrayList<AffiliatesTable> filtered_data = new ArrayList<AffiliatesTable>();
 
     @FXML
@@ -122,11 +124,26 @@ public class AffiliatesController extends Controller implements Initializable  {
         currentWindow.hide();
     }
 
+    public static ArrayList<Choice> getMatchingRecords(String string){
+        ArrayList<Choice> matchingList = new ArrayList<>();
+        for (AffiliatesTable datum : data) {
+            if (datum.getToChoose().replaceAll("null", "").toLowerCase().contains(string.toLowerCase())) {
+                Choice choice = new Choice(datum.getId_number(),datum.getToChoose().replaceAll("null", ""));
+                matchingList.add(choice);
+            }
+        }
+        return matchingList;
+    }
+
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadAffiliates();
+        data = FXCollections.observableArrayList(DatabaseConnection.getAffiliatesTableArrayList());
+    }
+
     @Override
     public void reload(){
         try {
-            DatabaseConnection.loadAffiliates();
-            data = FXCollections.observableArrayList(DatabaseConnection.getAffiliatesTableArrayList());
+            loadToArray();
             id_number.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("id_number"));
             address.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, String>("address"));
             opening_hours_from.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("opening_hours_from"));

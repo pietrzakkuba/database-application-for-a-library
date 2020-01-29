@@ -1,5 +1,6 @@
 package fxapp;
 
+import fxapp.containers.Choice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,11 +24,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
+import sql.tables.CopiesTable;
 import sql.tables.PositionsTable;
 
 import java.io.IOException;
 
-public class PositionsController implements Initializable {
+public class PositionsController extends Controller implements Initializable {
     public Button toMainMenuButton;
     public TableView<PositionsTable> mainTable;
     public TableColumn<PositionsTable, String> name;
@@ -35,21 +37,12 @@ public class PositionsController implements Initializable {
     public TableColumn<PositionsTable, Integer> number_of_employees;
     public TextField filter_text_box;
 
-    private ObservableList<PositionsTable> data;
+    private static ObservableList<PositionsTable> data;
     private ArrayList<PositionsTable> filtered_data = new ArrayList<PositionsTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            DatabaseConnection.loadPositions();
-            data = FXCollections.observableArrayList(DatabaseConnection.getPositionsTableArrayList());
-            name.setCellValueFactory(new PropertyValueFactory<PositionsTable, String>("name"));
-            minimal_hourly_rate.setCellValueFactory(new PropertyValueFactory<PositionsTable, Double>("minimal_hourly_rate"));
-            number_of_employees.setCellValueFactory(new PropertyValueFactory<PositionsTable, Integer>("number_of_employees"));
-            mainTable.setItems(data);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        reload();
     }
 
     @FXML
@@ -85,5 +78,34 @@ public class PositionsController implements Initializable {
             }
         }
         mainTable.setItems(FXCollections.observableArrayList(filtered_data));
+    }
+
+    public static ArrayList<Choice> getMatchingRecords(String string){
+        ArrayList<Choice> matchingList = new ArrayList<>();
+        for (PositionsTable datum : data) {
+            if (datum.getToChoose().replaceAll("null", "").toLowerCase().contains(string.toLowerCase())) {
+                Choice choice = new Choice(datum.getId(),datum.getToChoose().replaceAll("null", ""));
+                matchingList.add(choice);
+            }
+        }
+        return matchingList;
+    }
+
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadPositions();
+        data = FXCollections.observableArrayList(DatabaseConnection.getPositionsTableArrayList());
+    }
+
+    @Override
+    public void reload() {
+        try {
+            loadToArray();
+            name.setCellValueFactory(new PropertyValueFactory<PositionsTable, String>("name"));
+            minimal_hourly_rate.setCellValueFactory(new PropertyValueFactory<PositionsTable, Double>("minimal_hourly_rate"));
+            number_of_employees.setCellValueFactory(new PropertyValueFactory<PositionsTable, Integer>("number_of_employees"));
+            mainTable.setItems(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -12,8 +12,10 @@ public class EmployeesTable {
     private Date date_of_signing_contract;
     private Date date_of_contract_expiration;
     private double hourly_rate;
+    private int affiliate_id;
+    private int position_id;
 
-    public EmployeesTable(int id, String first_name, String last_name, String position, String affiliate, Date date_of_employment, Date date_of_signing_contract, Date date_of_contract_expiration, double hourly_rate) {
+    public EmployeesTable(int id, String first_name, String last_name, String position, String affiliate, Date date_of_employment, Date date_of_signing_contract, Date date_of_contract_expiration, double hourly_rate, int affiliate_id, int position_id) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -23,10 +25,20 @@ public class EmployeesTable {
         this.date_of_signing_contract = date_of_signing_contract;
         this.date_of_contract_expiration = date_of_contract_expiration;
         this.hourly_rate = hourly_rate;
+        this.affiliate_id = affiliate_id;
+        this.position_id = position_id;
+    }
+
+    public int getPosition_id() {
+        return position_id;
     }
 
     public String getAll() {
         return String.format("%d %s %s %s %s %s %s %s %s", this.id, this.first_name, this.last_name, this.position, this.affiliate, this.date_of_employment, this.date_of_signing_contract, this.date_of_contract_expiration, this.hourly_rate);
+    }
+
+    public int getAffiliate_id() {
+        return affiliate_id;
     }
 
     public int getId() {

@@ -47,6 +47,10 @@ public class CopiesTable {
         return String.format("%d %s %s %s %s %d %s %s", this.copy_id, this.book_title, this.availability, this.section, this.affiliate, this.release_number, this.release_year, this.type_of_cover);
     }
 
+    public String getToChoose() {
+        return String.format("%d %s availability: %s", this.copy_id, this.book_title, this.availability);
+    }
+
     public int getCopy_id() {
         return copy_id;
     }

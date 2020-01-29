@@ -5,6 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -18,7 +20,16 @@ public class DateParameter extends Parameter {
         if(value == null)
             this.valueField = new DatePicker();
         else
-            this.valueField = new DatePicker(StringToLocalDate.convert(formatter.format(value)));
+            this.valueField = new DatePicker(LocalDate.parse(formatter.format(value)));
+    }
+
+    public DateParameter(String name, Boolean required) {
+        this.name = new Label(name);
+        this.type = Type.date;
+        this.required = required;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.valueField = new DatePicker();
     }
 
     @Override

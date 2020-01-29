@@ -28,7 +28,7 @@ import sql.tables.OrdersTable;
 
 import java.io.IOException;
 
-public class OrdersController implements Initializable {
+public class OrdersController extends Controller implements Initializable {
     public Button toMainMenuButton;
     public TableView<OrdersTable> mainTable;
     public TableColumn<OrdersTable, Integer> id;
@@ -38,14 +38,15 @@ public class OrdersController implements Initializable {
     public TableColumn<OrdersTable, String> book_title;
     public TextField filter_text_box;
 
-    private ObservableList<OrdersTable> data;
-    private ArrayList<OrdersTable> filtered_data = new ArrayList<OrdersTable>();
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadOrders();
+        data = FXCollections.observableArrayList(DatabaseConnection.getOrdersTableArrayList());
+    }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void reload() {
         try {
-            DatabaseConnection.loadOrders();
-            data = FXCollections.observableArrayList(DatabaseConnection.getOrdersTableArrayList());
+            loadToArray();
             id.setCellValueFactory(new PropertyValueFactory<OrdersTable, Integer>("id"));
             order_date.setCellValueFactory(new PropertyValueFactory<OrdersTable, Date>("order_date"));
             reader_first_name.setCellValueFactory(new PropertyValueFactory<OrdersTable, String>("reader_first_name"));
@@ -55,6 +56,14 @@ public class OrdersController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private static ObservableList<OrdersTable> data;
+    private ArrayList<OrdersTable> filtered_data = new ArrayList<OrdersTable>();
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        reload();
     }
 
     @FXML
