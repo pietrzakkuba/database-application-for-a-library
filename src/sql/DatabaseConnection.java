@@ -716,11 +716,11 @@ public class DatabaseConnection {
         if (positionsTableArrayList.size() > 0) {
             positionsTableArrayList.clear();
         }
-        String query =  "select s.id, s.nazwa, s.minimalna_stawka_godzinowa, count(p.id) " +
+        String query =  "select s.nazwa, s.minimalna_stawka_godzinowa, count(p.ID), s.id " +
                         "from stanowiska s " +
                         "left join pracownicy p " +
-                        "on p.id_stanowiska = s.id " +
-                        "group by(s.id, s.minimalna_stawka_godzinowa)";
+                        "on s.id = p.ID_STANOWISKA " +
+                        "group by(s.id, s.nazwa, s.minimalna_stawka_godzinowa)";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
