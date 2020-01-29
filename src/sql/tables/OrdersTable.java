@@ -8,17 +8,28 @@ public class OrdersTable {
     private String reader_first_name;
     private String reader_last_name;
     private String book_title;
+    private int book_id, reader_id;
 
-    public OrdersTable(int id, Date order_date, String reader_first_name, String reader_last_name, String book_title) {
+    public OrdersTable(int id, Date order_date, String reader_first_name, String reader_last_name, String book_title, int book_id, int reader_id) {
         this.id = id;
         this.order_date = order_date;
         this.reader_first_name = reader_first_name;
         this.reader_last_name = reader_last_name;
         this.book_title = book_title;
+        this.book_id = book_id;
+        this.reader_id = reader_id;
+    }
+
+    public int getBook_id() {
+        return book_id;
+    }
+
+    public int getReader_id() {
+        return reader_id;
     }
 
     public String getAll() {
-        return String.format("%d %s %s %s %s ", this.id, this.order_date, this.reader_first_name, this.reader_last_name, this.book_title);
+        return String.format("%d %s %d %s %s %s ", this.id, this.order_date, reader_id, this.reader_first_name, this.reader_last_name, this.book_title);
     }
 
     public int getId() {
