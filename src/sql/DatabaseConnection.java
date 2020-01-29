@@ -559,7 +559,6 @@ public class DatabaseConnection {
                     ));
         }
     }
-
     public static void loadCheckOuts() throws SQLException {
         if (checkOutsTableArrayList.size() > 0) {
             checkOutsTableArrayList.clear();

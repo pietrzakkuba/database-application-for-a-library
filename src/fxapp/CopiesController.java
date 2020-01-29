@@ -41,6 +41,7 @@ public class CopiesController extends Controller implements Initializable {
     public TableColumn<CopiesTable, Date> release_year;
     public TableColumn<CopiesTable, String> type_of_cover;
     public TextField filter_text_box;
+    public Button returnCopyButton;
 
     private ObservableList<CopiesTable> data;
     private ArrayList<CopiesTable> filtered_data = new ArrayList<CopiesTable>();
@@ -174,5 +175,9 @@ public class CopiesController extends Controller implements Initializable {
             }
         }
         mainTable.setItems(FXCollections.observableArrayList(filtered_data));
+    }
+
+    public void returnCopy(ActionEvent actionEvent) {
+        System.out.println("siema mordo!");
     }
 }
