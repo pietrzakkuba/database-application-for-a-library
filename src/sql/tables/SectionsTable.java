@@ -6,13 +6,19 @@ public class SectionsTable {
     private String section_short_name;
     private int number_of_books;
     private String affiliate_name;
+    private int affiliate_id;
 
-    public SectionsTable(int section_id, String section_name, String section_short_name, int number_of_books, String affiliate_name) {
+    public int getAffiliate_id() {
+        return affiliate_id;
+    }
+
+    public SectionsTable(int section_id, String section_name, String section_short_name, int number_of_books, String affiliate_name, int affiliate_id) {
         this.section_id = section_id;
         this.section_name = section_name;
         this.section_short_name = section_short_name;
         this.number_of_books = number_of_books;
         this.affiliate_name = affiliate_name;
+        this.affiliate_id = affiliate_id;
     }
 
     public String getAll() {

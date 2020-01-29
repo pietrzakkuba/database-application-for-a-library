@@ -57,6 +57,8 @@ public class EmployeesController extends Controller implements Initializable {
     public void reload() {
         try {
             loadToArray();
+            AffiliatesController.loadToArray();
+            PositionsController.loadToArray();
             id.setCellValueFactory(new PropertyValueFactory<EmployeesTable, Integer>("id"));
             first_name.setCellValueFactory(new PropertyValueFactory<EmployeesTable, String>("first_name"));
             last_name.setCellValueFactory(new PropertyValueFactory<EmployeesTable, String>("last_name"));

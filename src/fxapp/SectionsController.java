@@ -1,6 +1,8 @@
 package fxapp;
 
-import fxapp.containers.Choice;
+import fxapp.containers.*;
+import fxapp.editWindows.AddElement;
+import fxapp.editWindows.DeleteElement;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,8 +10,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,14 +20,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
 import sql.tables.BooksTable;
+import sql.tables.ReadersTable;
 import sql.tables.SectionsTable;
 
 import java.io.IOException;
@@ -79,18 +81,74 @@ public class SectionsController extends Controller implements Initializable {
     }
 
     @FXML
-    void add(ActionEvent event) {
+    void modify(ActionEvent event) {
+        TablePosition pos;
+        try {
+            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        int row = pos.getRow();
 
+        SectionsTable item = mainTable.getItems().get(row);
+
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new TextFieldParameter("Section name", true, item.getSection_name()));
+        parameters.add(new TextFieldParameter("Short name", true, item.getSection_short_name()));
+        parameters.add(new TextFieldWithChoiceParameter("Filia", true, AffiliatesController::getMatchingRecords,item.getAffiliate_id() + " " + item.getAffiliate_name(),item.getAffiliate_id()));
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        try {
+            AddElement.startModifying(item.getSection_id(),this,currentWindow, parameters, DatabaseConnection::modifySection,"Modify section");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
+    }
+
+    @FXML
+    void add(ActionEvent event) {
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new TextFieldParameter("Section name", true));
+        parameters.add(new TextFieldParameter("Short name", true));
+        parameters.add(new TextFieldWithChoiceParameter("Filia", true, AffiliatesController::getMatchingRecords));
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        try {
+            AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addSection, "Add section");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
     }
 
     @FXML
     void delete(ActionEvent event) {
+        TablePosition pos;
+        try {
+            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        int row = pos.getRow();
 
-    }
+        SectionsTable item = mainTable.getItems().get(row);
 
-    @FXML
-    void modify(ActionEvent event) {
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new LabelParameter("Section name", item.getSection_name()));
+        parameters.add(new LabelParameter("Short name", item.getSection_short_name()));
+        parameters.add(new LabelParameter("Filia",item.getAffiliate_id() + " " + item.getAffiliate_name()));
 
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        try {
+            DeleteElement.startDeleting(item.getSection_id(),this,currentWindow, parameters, DatabaseConnection::deleteSection,"Delete section");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
     }
 
     public void toMainMenu(ActionEvent actionEvent) {

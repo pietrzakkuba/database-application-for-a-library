@@ -9,10 +9,7 @@ import fxapp.AffiliatesController;
 import fxapp.CopiesController;
 import fxapp.PositionsController;
 import fxapp.ReadersController;
-import fxapp.containers.DateParameter;
-import fxapp.containers.Parameter;
-import fxapp.containers.TextFieldParameter;
-import fxapp.containers.TextFieldWithChoiceParameter;
+import fxapp.containers.*;
 import sql.tables.*;
 
 public class DatabaseConnection {
@@ -27,8 +24,6 @@ public class DatabaseConnection {
     private static ArrayList<PositionsTable> positionsTableArrayList = new ArrayList<PositionsTable>();
     private static ArrayList<ReadersTable> readersTableArrayList = new ArrayList<ReadersTable>();
     private static ArrayList<SectionsTable> sectionsTableArrayList = new ArrayList<SectionsTable>();
-    private static ArrayList<ShiftScheduleTable> shiftScheduleTableArrayList = new ArrayList<ShiftScheduleTable>();
-    private static ArrayList<ShiftsTable> shiftsTableArrayList = new ArrayList<ShiftsTable>();
 
     public static Connection getConnection() {
         return connection;
@@ -73,15 +68,7 @@ public class DatabaseConnection {
     public static ArrayList<SectionsTable> getSectionsTableArrayList() {
         return sectionsTableArrayList;
     }
-
-    public static ArrayList<ShiftScheduleTable> getShiftScheduleTableArrayList() {
-        return shiftScheduleTableArrayList;
-    }
-
-    public static ArrayList<ShiftsTable> getShiftsTableArrayList() {
-        return shiftsTableArrayList;
-    }
-
+    
     public static void connect() throws SQLException, ClassNotFoundException {
         Class.forName("oracle.jdbc.driver.OracleDriver");
         connection = DriverManager.getConnection(
@@ -510,6 +497,106 @@ public class DatabaseConnection {
         return deleteStatement("Pracownicy","id", id);
     }
 
+    public static String addOrder(String[] values){
+        String bookID = values[0],  readerID = values[1], orderDate = values[2];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_czytelnika","data_zamowienia"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.date));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(bookID,readerID,orderDate));
+
+        return insertStatement("zamowienia",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyOrder(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String bookID = values[0],  readerID = values[1], orderDate = values[2];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_czytelnika","data_zamowienia"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.date));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(bookID,readerID,orderDate));
+
+        return updateStatement("Zamowienia",fitFields,fitValues,fitTypes,"id",id);
+    }
+
+    public static String deleteOrder(String[] values) {
+        String id = values[0];
+        return deleteStatement("Zamowienia","id", id);
+    }
+
+    public static String addPosition(String[] values){
+        String name = values[0],  minimal_hourly_rate = values[1];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("nazwa","minimalna_stawka_godzinowa"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(name,minimal_hourly_rate));
+
+        return insertStatement("Stanowiska",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyPosition(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String name = values[0],  minimal_hourly_rate = values[1];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("nazwa","minimalna_stawka_godzinowa"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(name,minimal_hourly_rate));
+
+        return updateStatement("Stanowiska",fitFields,fitValues,fitTypes,"id",id);
+    }
+
+    public static String deletePosition(String[] values) {
+        String id = values[0];
+        return deleteStatement("Stanowiska","id", id);
+    }
+
+    public static String addReader(String[] values){
+        String first = values[0],  last = values[1], birthday = values[2], singInDate = values[3];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("imie","nazwisko","data_urodzenia","data_zapisania"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.date,Types.date));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(first,last,birthday,singInDate));
+
+        return insertStatement("Czytelnicy",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifyReader(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String first = values[0],  last = values[1], birthday = values[2], singInDate = values[3];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("imie","nazwisko","data_urodzenia","data_zapisania"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.date,Types.date));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(first,last,birthday,singInDate));
+
+        return updateStatement("Czytelnicy",fitFields,fitValues,fitTypes,"id",id);
+    }
+
+    public static String deleteReader(String[] values) {
+        String id = values[0];
+        return deleteStatement("Czytelnicy","id", id);
+    }
+
+    public static String addSection(String[] values){
+        String name = values[0],  shortName = values[1], affiliate_id = values[2];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("nazwa","skrot","numer_filii"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(name,shortName,affiliate_id));
+
+        return insertStatement("Dzialy",fitFields,fitValues,fitTypes);
+    }
+
+    public static String modifySection(String[] values){
+        String id = values[0];
+        values = Arrays.copyOfRange(values, 1, values.length);
+        String name = values[0],  shortName = values[1], affiliate_id = values[2];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("nazwa","skrot","numer_filii"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(name,shortName,affiliate_id));
+
+        return updateStatement("Dzialy",fitFields,fitValues,fitTypes,"id",id);
+    }
+
+    public static String deleteSection(String[] values) {
+        String id = values[0];
+        return deleteStatement("Dzialy","id", id);
+    }
+
     public static void loadEverything() throws SQLException {
         loadAffiliates();
         loadAuthors();
@@ -521,8 +608,6 @@ public class DatabaseConnection {
         loadPositions();
         loadReaders();
         loadSections();
-        loadShiftSchedule();
-        loadShifts();
     }
 
     public static void loadAffiliates() throws SQLException {
@@ -530,13 +615,9 @@ public class DatabaseConnection {
             affiliatesTableArrayList.clear();
         }
         String query =  "select numer, adres, godziny_pracy_od, godziny_pracy_do, count(distinct j.id_pracownika) " +
-                        "from filie " +
-                        "left join grafik_dyzurow g " +
-                        "on numer = g.numer_filii " +
-                        "left join jednostka_pracy j " +
-                        "on g.id = j.id_grafiku " +
+                        "from filie f " +
                         "left join pracownicy p " +
-                        "on p.id = j.id_pracownika " +
+                        "on p.ID_FILII = f.numer " +
                         "group by(numer, adres, godziny_pracy_od, godziny_pracy_do)";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
@@ -670,12 +751,8 @@ public class DatabaseConnection {
         }
         String query =  "select p.id, p.imie, p.nazwisko, s.NAZWA, f.adres, p.data_zatrudnienia, p.data_podpisania_ostatniej_umowy, p.data_wygasniecia_umowy, p.stawka_godzinowa, f.NUMER, p.id_stanowiska " +
                         "from pracownicy p " +
-                        "inner join jednostka_pracy jp " +
-                        "on jp.id_pracownika = p.id " +
-                        "inner join grafik_dyzurow gd " +
-                        "on gd.id = jp.id_grafiku " +
                         "inner join filie f " +
-                        "on f.numer = gd.numer_filii " +
+                        "on f.numer = p.ID_FILII " +
                         "inner join STANOWISKA s " +
                         "on p.ID = s.ID";
         Statement statement = connection.createStatement();
@@ -702,7 +779,7 @@ public class DatabaseConnection {
         if (ordersTableArrayList.size() > 0) {
             ordersTableArrayList.clear();
         }
-        String query =  "select z.id, z.data_zamowienia, c.imie, c.nazwisko, k.tytul " +
+        String query =  "select z.id, z.data_zamowienia, c.imie, c.nazwisko, k.tytul, k.id, c.id " +
                         "from zamowienia z " +
                         "inner join czytelnicy c " +
                         "on c.id = z.id_czytelnika " +
@@ -717,7 +794,9 @@ public class DatabaseConnection {
                             resultSet.getDate(2),
                             resultSet.getString(3),
                             resultSet.getString(4),
-                            resultSet.getString(5)
+                            resultSet.getString(5),
+                            resultSet.getInt(6),
+                            resultSet.getInt(7)
                     ));
         }
     }
@@ -772,13 +851,13 @@ public class DatabaseConnection {
         if (sectionsTableArrayList.size() > 0) {
             sectionsTableArrayList.clear();
         }
-        String query =  "select d.id, d.nazwa, d.skrot, count(e.numer), f.adres " +
+        String query =  "select d.id, d.nazwa, d.skrot, count(e.numer), f.adres, f.numer " +
                         "from dzialy d " +
                         "inner join filie f " +
                         "on f.numer = d.numer_filii " +
                         "left join egzemplarze e " +
                         "on e.id_dzialu = d.id " +
-                        "group by(d.id, d.nazwa, d.skrot, f.adres)";
+                        "group by(d.id, d.nazwa, d.skrot, f.adres, f.numer)";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
@@ -788,59 +867,8 @@ public class DatabaseConnection {
                             resultSet.getString(2),
                             resultSet.getString(3),
                             resultSet.getInt(4),
-                            resultSet.getString(5)
-                    ));
-        }
-    }
-
-    public static void loadShiftSchedule() throws SQLException {
-        if (shiftScheduleTableArrayList.size() > 0) {
-            shiftScheduleTableArrayList.clear();
-        }
-        String query =  "select gd.id, gd.czy_obowiazuje, f.adres, gd.nazwa, gd.obowiazuje_od, gd.obowiazuje_do, count(jp.id_grafiku) " +
-                        "from grafik_dyzurow gd " +
-                        "inner join filie f " +
-                        "on gd.numer_filii = f.numer " +
-                        "left join jednostka_pracy jp " +
-                        "on gd.id = jp.id_grafiku " +
-                        "group by(gd.id, gd.czy_obowiazuje, f.adres, gd.nazwa, gd.obowiazuje_od, gd.obowiazuje_do)";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-            shiftScheduleTableArrayList.add(
-                    new ShiftScheduleTable(
-                            resultSet.getInt(1),
-                            resultSet.getBoolean(2),
-                            resultSet.getString(3),
-                            resultSet.getString(4),
-                            resultSet.getDate(5),
-                            resultSet.getDate(6),
-                            resultSet.getInt(7)
-                    ));
-        }
-    }
-
-    public static void loadShifts() throws SQLException {
-        if (shiftsTableArrayList.size() > 0) {
-            shiftsTableArrayList.clear();
-        }
-        String query =  "select gd.nazwa, od_godziny, do_godziny, p.imie, p.nazwisko, (do_godziny - od_godziny) " +
-                        "from jednostka_pracy " +
-                        "inner join grafik_dyzurow gd " +
-                        "on jednostka_pracy.id_grafiku = gd.id " +
-                        "inner join pracownicy p " +
-                        "on jednostka_pracy.id_pracownika = p.id";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-            shiftsTableArrayList.add(
-                    new ShiftsTable(
-                            resultSet.getString(1),
-                            resultSet.getDouble(2),
-                            resultSet.getDouble(3),
-                            resultSet.getString(4),
                             resultSet.getString(5),
-                            resultSet.getDouble(6)
+                            resultSet.getInt(6)
                     ));
         }
     }
