@@ -102,25 +102,6 @@ public class MainMenuController {
         });
     }
 
-    public void toShiftSchedule(ActionEvent actionEvent) {
-        Platform.runLater( () -> {
-            try {
-                Main.getMainStage().setScene(new Scene(FXMLLoader.load(getClass().getResource("shift-schedule.fxml"))));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    public void toShifts(ActionEvent actionEvent) {
-        Platform.runLater( () -> {
-            try {
-                Main.getMainStage().setScene(new Scene(FXMLLoader.load(getClass().getResource("shifts.fxml"))));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
 
     public void toEmployees(ActionEvent actionEvent) {
         Platform.runLater( () -> {

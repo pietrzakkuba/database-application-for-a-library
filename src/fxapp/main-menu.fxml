@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.MainMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.MainMenuController">
    <children>
-      <GridPane hgap="5.0" layoutX="98.0" layoutY="132.0" prefHeight="380.0" prefWidth="758.0" vgap="5.0">
+      <GridPane hgap="5.0" layoutX="105.0" layoutY="132.0" prefHeight="380.0" prefWidth="758.0" vgap="5.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -30,13 +26,11 @@
             <Button fx:id="copiesButton" mnemonicParsing="false" onAction="#toCopies" prefHeight="300.0" prefWidth="300.0" text="Copies" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button fx:id="sectionsButton" mnemonicParsing="false" onAction="#toSections" prefHeight="300.0" prefWidth="300.0" text="Sections" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Button fx:id="affiliatesButton" mnemonicParsing="false" onAction="#toAffiliates" prefHeight="300.0" prefWidth="300.0" text="Affiliates" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Button fx:id="shiftScheduleButton" mnemonicParsing="false" onAction="#toShiftSchedule" prefHeight="300.0" prefWidth="300.0" text="Shift schedule" GridPane.rowIndex="2" />
-            <Button fx:id="shiftsButton" mnemonicParsing="false" onAction="#toShifts" prefHeight="300.0" prefWidth="300.0" text="Shifts" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button fx:id="employeesButton" mnemonicParsing="false" onAction="#toEmployees" prefHeight="300.0" prefWidth="300.0" text="Employees" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Button fx:id="positionsButton" mnemonicParsing="false" onAction="#toPositions" prefHeight="300.0" prefWidth="300.0" text="Positions" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Button fx:id="employeesButton" mnemonicParsing="false" onAction="#toEmployees" prefHeight="300.0" prefWidth="300.0" text="Employees" GridPane.rowIndex="2" />
+            <Button fx:id="positionsButton" mnemonicParsing="false" onAction="#toPositions" prefHeight="300.0" prefWidth="300.0" text="Positions" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" prefHeight="17.0" prefWidth="954.0" styleClass="our-library-label" text="Our Library" />
-      <Button fx:id="exitButton" layoutX="762.0" layoutY="552.0" onAction="#exit" mnemonicParsing="false" prefHeight="35.0" prefWidth="94.0" styleClass="exit-button" text="Exit" />
+      <Button fx:id="exitButton" layoutX="762.0" layoutY="552.0" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="94.0" styleClass="exit-button" text="Exit" />
    </children>
 </AnchorPane>
