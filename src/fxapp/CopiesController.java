@@ -190,7 +190,19 @@ public class CopiesController extends Controller implements Initializable {
         mainTable.setItems(FXCollections.observableArrayList(filtered_data));
     }
 
-    public void returnCopy(ActionEvent actionEvent) {
-        System.out.println("siema mordo!");
+    public void returnCopy(ActionEvent actionEvent) throws SQLException {
+        int row;
+        try {
+            row = mainTable.getSelectionModel().getSelectedCells().get(0).getRow();
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        CopiesTable item = mainTable.getItems().get(row);
+//        if (!item.isAvailability()) {
+            DatabaseConnection.returnCopy(item.getCopy_id());
+            reload();
+//        }
+
+
     }
 }

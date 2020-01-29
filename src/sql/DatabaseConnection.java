@@ -98,6 +98,17 @@ public class DatabaseConnection {
         date
     }
 
+    public static void returnCopy(int copy_id) throws SQLException {
+//        String query = "ZwrocEgzemplarz(" + Integer.toString(copy_id) + ");";
+//        System.out.println(query);
+        //connection.createStatement().executeUpdate("BEGIN query; END;");
+//        connection.createStatement().execute("execute " + query);
+        PreparedStatement preparedStatement = connection.prepareStatement("call ZwrocEgzemplarz(?)");
+        preparedStatement.setInt(1, copy_id);
+        preparedStatement.execute();
+
+    }
+
     private static String insertStatement(String table, ArrayList<String> fields, ArrayList<String> values, ArrayList<Types> types){
         String query =  "insert into " + table + " (";
         for(int i=0; i<fields.size(); i++){
