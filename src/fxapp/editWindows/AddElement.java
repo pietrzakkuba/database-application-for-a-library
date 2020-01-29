@@ -158,7 +158,7 @@ public class AddElement {
                 ((AnchorPane)editFields.getParent()).getChildren().add(((TextFieldWithChoiceParameter)parameters.get(i)).getChoiceList());
             }
         }
-        editFields.setPrefHeight(parameters.size()*30);
+        editFields.setPrefHeight(parameters.size()*30 + 15);
     }
 
     @FXML

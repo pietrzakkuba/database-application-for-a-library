@@ -7,14 +7,16 @@ public class BooksTable {
     private String author_last_name;
     private int number_of_copies;
     private int number_of_orders;
+    private int author_id;
 
-    public BooksTable(int id, String title, String author_first_name, String author_last_name, int number_of_copies, int number_of_orders) {
+    public BooksTable(int id, String title, String author_first_name, String author_last_name, int number_of_copies, int number_of_orders, int author_id) {
         this.id = id;
         this.title = title;
         this.author_first_name = author_first_name;
         this.author_last_name = author_last_name;
         this.number_of_copies = number_of_copies;
         this.number_of_orders = number_of_orders;
+        this.author_id = author_id;
     }
 
     public String getAll() {
@@ -35,6 +37,10 @@ public class BooksTable {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getAuthor_id() {
+        return author_id;
     }
 
     public void setTitle(String title) {

@@ -23,8 +23,20 @@ public class AuthorsTable {
         this.nationality = nationality;
     }
 
+
     public String getAll() {
         return String.format("%d %s %s %s %s %s %s", this.id, this.first_name, this.last_name, this.pseudonym, this.date_of_birth, this.date_of_death, this.nationality);
+    }
+
+    public String getToChoose() {
+        if(this.pseudonym == null){
+            if(this.nationality == null)
+                return String.format("%s %s",  this.first_name, this.last_name);
+            return String.format("%s %s, %s",  this.first_name, this.last_name, this.nationality);
+        }
+        if(this.nationality == null)
+            return String.format("%s %s, %s",  this.first_name, this.last_name, this.pseudonym);
+        return String.format("%s %s, %s, %s",  this.first_name, this.last_name, this.pseudonym, this.nationality);
     }
 
     public int getId() {

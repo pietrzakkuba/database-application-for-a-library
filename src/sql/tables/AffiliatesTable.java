@@ -21,6 +21,10 @@ public class AffiliatesTable {
         return String.format("%d %s %d %d %d", this.id_number, this.address, this.opening_hours_from, this.opening_hours_to, this.number_of_employees);
     }
 
+    public String getToChoose() {
+        return String.format("%d %s", this.id_number, this.address);
+    }
+
     public int getId_number() {
         return id_number;
     }

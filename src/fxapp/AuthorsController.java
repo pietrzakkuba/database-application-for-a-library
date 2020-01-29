@@ -1,5 +1,6 @@
 package fxapp;
 
+import fxapp.containers.*;
 import fxapp.editWindows.AddElement;
 import fxapp.editWindows.DeleteElement;
 import javafx.application.Platform;
@@ -27,6 +28,7 @@ import javafx.stage.Stage;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
 import sql.tables.AuthorsTable;
+import sql.tables.SectionsTable;
 
 import java.io.IOException;
 
@@ -42,14 +44,29 @@ public class AuthorsController extends Controller implements Initializable {
     public TableColumn<AuthorsTable, String> nationality;
     public TextField filter_text_box;
 
-    private ObservableList<AuthorsTable> data;
+    private static ObservableList<AuthorsTable> data;
     private ArrayList<AuthorsTable> filtered_data = new ArrayList<AuthorsTable>();
+
+    public static ArrayList<Choice> getMatchingRecords(String string){
+        ArrayList<Choice> matchingList = new ArrayList<>();
+        for (AuthorsTable datum : data) {
+            if (datum.getToChoose().replaceAll("null", "").toLowerCase().contains(string.toLowerCase())) {
+                Choice choice = new Choice(datum.getId(),datum.getToChoose().replaceAll("null", ""));
+                matchingList.add(choice);
+            }
+        }
+        return matchingList;
+    }
+
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadAuthors();
+        data = FXCollections.observableArrayList(DatabaseConnection.getAuthorsTableArrayList());
+    }
 
     @Override
     public void reload() {
         try {
-            DatabaseConnection.loadAuthors();
-            data = FXCollections.observableArrayList(DatabaseConnection.getAuthorsTableArrayList());
+            loadToArray();
             id.setCellValueFactory(new PropertyValueFactory<AuthorsTable, Integer>("id"));
             first_name.setCellValueFactory(new PropertyValueFactory<AuthorsTable, String>("first_name"));
             last_name.setCellValueFactory(new PropertyValueFactory<AuthorsTable, String>("last_name"));
@@ -69,32 +86,58 @@ public class AuthorsController extends Controller implements Initializable {
     }
 
     @FXML
-    void add(ActionEvent event) {
-        /*Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+    void modify(ActionEvent event) {
+        TablePosition pos;
+        try {
+            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        int row = pos.getRow();
 
-        ArrayList<String> list = new ArrayList<>();
-        list.add("FirstName");
-        list.add("LastName");
-        list.add("Pseudonym");
-        list.add("Nationality");
-        list.add("Date of birth");
-        list.add("Date of death");
+        AuthorsTable item = mainTable.getItems().get(row);
 
-        ArrayList<Integer> dateElements = new ArrayList<>();
-        dateElements.add(4);
-        dateElements.add(5);
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new TextFieldParameter("First name", true, item.getFirst_name()));
+        parameters.add(new TextFieldParameter("Last name", true, item.getLast_name()));
+        parameters.add(new TextFieldParameter("Pseudonym", false, item.getPseudonym()));
+        parameters.add(new TextFieldParameter("Nationality", false, item.getNationality()));
+        parameters.add(new DateParameter("Date of birth", false, item.getDate_of_birth()));
+        parameters.add(new DateParameter("Date of death", false, item.getDate_of_death()));
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
         try {
-            AddElement.startAdding(this,currentWindow, list, dateElements, DatabaseConnection::addAuthor,"Add author");
+            AddElement.startModifying(item.getId(),this,currentWindow, parameters, DatabaseConnection::modifyAuthor,"Modify author");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        currentWindow.hide();*/
+        currentWindow.hide();
+    }
+
+    @FXML
+    void add(ActionEvent event) {
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new TextFieldParameter("First name", true));
+        parameters.add(new TextFieldParameter("Last name", true ));
+        parameters.add(new TextFieldParameter("Pseudonym", false));
+        parameters.add(new TextFieldParameter("Nationality", false));
+        parameters.add(new DateParameter("Date of birth", false));
+        parameters.add(new DateParameter("Date of death", false));
+
+        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
+
+        try {
+            AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addAuthor,"Add author");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentWindow.hide();
     }
 
     @FXML
     void delete(ActionEvent event) {
-        /*TablePosition pos;
+        TablePosition pos;
         try {
             pos = mainTable.getSelectionModel().getSelectedCells().get(0);
         }catch (IndexOutOfBoundsException e){
@@ -102,94 +145,24 @@ public class AuthorsController extends Controller implements Initializable {
         }
         int row = pos.getRow();
 
-        // Item here is the table view type:
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         AuthorsTable item = mainTable.getItems().get(row);
-        ArrayList<String> values = new ArrayList<>();
-        values.add(Integer.toString(item.getId()));
-        values.add(item.getFirst_name());
-        values.add(item.getLast_name());
-        values.add(item.getPseudonym());
-        values.add(item.getNationality());
-        try{
-            values.add(formatter.format(item.getDate_of_birth()));
-        }catch (NullPointerException e){
-            values.add("");
-        }
-        try{
-        values.add(formatter.format(item.getDate_of_death()));
-        }catch (NullPointerException e){
-            values.add("");
-        }
+
+        ArrayList<Parameter> parameters = new ArrayList<>();
+        parameters.add(new LabelParameter("First name", item.getFirst_name()));
+        parameters.add(new LabelParameter("Last name", item.getLast_name()));
+        parameters.add(new LabelParameter("Pseudonym",  item.getPseudonym()));
+        parameters.add(new LabelParameter("Nationality",  item.getNationality()));
+        parameters.add(new LabelParameter("Date of birth",  item.getDate_of_birth()));
+        parameters.add(new LabelParameter("Date of death",  item.getDate_of_death()));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Id");
-        list.add("FirstName");
-        list.add("LastName");
-        list.add("Pseudonym");
-        list.add("Nationality");
-        list.add("Date of birth");
-        list.add("Date of death");
-
         try {
-            DeleteElement.startDeleting(item.getId(),this,currentWindow, list, values, DatabaseConnection::deleteAuthor,"Delete author");
+            DeleteElement.startDeleting(item.getId(),this,currentWindow, parameters, DatabaseConnection::deleteAuthor,"Delete author");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        currentWindow.hide();*/
-    }
-
-    @FXML
-    void modify(ActionEvent event) {
-        /*TablePosition pos;
-        try {
-            pos = mainTable.getSelectionModel().getSelectedCells().get(0);
-        }catch (IndexOutOfBoundsException e){
-            return;
-        }
-        int row = pos.getRow();
-
-        // Item here is the table view type:
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        AuthorsTable item = mainTable.getItems().get(row);
-        ArrayList<String> values = new ArrayList<>();
-        values.add(item.getFirst_name());
-        values.add(item.getLast_name());
-        values.add(item.getPseudonym());
-        values.add(item.getNationality());
-        try{
-            values.add(formatter.format(item.getDate_of_birth()));
-        }catch (NullPointerException e){
-            values.add("");
-        }
-        try{
-            values.add(formatter.format(item.getDate_of_death()));
-        }catch (NullPointerException e){
-            values.add("");
-        }
-
-        Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
-
-        ArrayList<String> list = new ArrayList<>();
-        list.add("FirstName");
-        list.add("LastName");
-        list.add("Pseudonym");
-        list.add("Nationality");
-        list.add("Date of birth");
-        list.add("Date of death");
-
-        ArrayList<Integer> dateElements = new ArrayList<>();
-        dateElements.add(4);
-        dateElements.add(5);
-
-        try {
-            AddElement.startModifying(item.getId(),this,currentWindow, list, dateElements, values, DatabaseConnection::modifyAuthor,"Add author");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        currentWindow.hide();*/
+        currentWindow.hide();
     }
 
     public void toMainMenu(ActionEvent actionEvent) {

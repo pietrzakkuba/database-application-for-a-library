@@ -29,7 +29,7 @@ import sql.tables.ShiftsTable;
 
 import java.io.IOException;
 
-public class ShiftsController implements Initializable {
+public class ShiftsController extends Controller implements Initializable {
     public Button toMainMenuButton;
     public TableView<ShiftsTable> mainTable;
     public TableColumn<ShiftsTable, String> schedule_name;
@@ -40,24 +40,12 @@ public class ShiftsController implements Initializable {
     public TableColumn<ShiftsTable, Double> shift_length;
     public TextField filter_text_box;
 
-    private ObservableList<ShiftsTable> data;
+    private static ObservableList<ShiftsTable> data;
     private ArrayList<ShiftsTable> filtered_data = new ArrayList<ShiftsTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            DatabaseConnection.loadShifts();
-            data = FXCollections.observableArrayList(DatabaseConnection.getShiftsTableArrayList());
-            schedule_name.setCellValueFactory(new PropertyValueFactory<ShiftsTable, String>("schedule_name"));
-            time_from.setCellValueFactory(new PropertyValueFactory<ShiftsTable, Double>("time_from"));
-            time_to.setCellValueFactory(new PropertyValueFactory<ShiftsTable, Double>("time_to"));
-            employee_first_name.setCellValueFactory(new PropertyValueFactory<ShiftsTable, String>("employee_first_name"));
-            employee_last_name.setCellValueFactory(new PropertyValueFactory<ShiftsTable, String>("employee_last_name"));
-            shift_length.setCellValueFactory(new PropertyValueFactory<ShiftsTable, Double>("shift_length"));
-            mainTable.setItems(data);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        reload();
     }
 
     @FXML
@@ -93,5 +81,26 @@ public class ShiftsController implements Initializable {
             }
         }
         mainTable.setItems(FXCollections.observableArrayList(filtered_data));
+    }
+
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadShifts();
+        data = FXCollections.observableArrayList(DatabaseConnection.getShiftsTableArrayList());
+    }
+
+        @Override
+    public void reload() {
+        try {
+            loadToArray();
+            schedule_name.setCellValueFactory(new PropertyValueFactory<ShiftsTable, String>("schedule_name"));
+            time_from.setCellValueFactory(new PropertyValueFactory<ShiftsTable, Double>("time_from"));
+            time_to.setCellValueFactory(new PropertyValueFactory<ShiftsTable, Double>("time_to"));
+            employee_first_name.setCellValueFactory(new PropertyValueFactory<ShiftsTable, String>("employee_first_name"));
+            employee_last_name.setCellValueFactory(new PropertyValueFactory<ShiftsTable, String>("employee_last_name"));
+            shift_length.setCellValueFactory(new PropertyValueFactory<ShiftsTable, Double>("shift_length"));
+            mainTable.setItems(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

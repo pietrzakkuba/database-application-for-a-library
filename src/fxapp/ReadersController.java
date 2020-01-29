@@ -1,5 +1,6 @@
 package fxapp;
 
+import fxapp.containers.Choice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,10 +25,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
+import sql.tables.BooksTable;
 import sql.tables.ReadersTable;
 
 
-public class ReadersController implements Initializable {
+public class ReadersController extends Controller implements Initializable {
     public Button toMainMenuButton;
     public TableView<ReadersTable> mainTable;
     public TableColumn<ReadersTable, Integer> id;
@@ -38,24 +40,28 @@ public class ReadersController implements Initializable {
     public TableColumn<ReadersTable, Integer> number_of_borrowed_books;
     public TextField filter_text_box;
 
-    private ObservableList<ReadersTable> data;
+    private static ObservableList<ReadersTable> data;
     private ArrayList<ReadersTable> filtered_data = new ArrayList<ReadersTable>();
+
+    public static ArrayList<Choice> getMatchingRecords(String string){
+        ArrayList<Choice> matchingList = new ArrayList<>();
+        for (ReadersTable datum : data) {
+            if (datum.getToChoose().replaceAll("null", "").toLowerCase().contains(string.toLowerCase())) {
+                Choice choice = new Choice(datum.getId(),datum.getToChoose().replaceAll("null", ""));
+                matchingList.add(choice);
+            }
+        }
+        return matchingList;
+    }
+
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadReaders();
+        data = FXCollections.observableArrayList(DatabaseConnection.getReadersTableArrayList());
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            DatabaseConnection.loadReaders();
-            data = FXCollections.observableArrayList(DatabaseConnection.getReadersTableArrayList());
-            id.setCellValueFactory(new PropertyValueFactory<ReadersTable, Integer>("id"));
-            first_name.setCellValueFactory(new PropertyValueFactory<ReadersTable, String>("first_name"));
-            last_name.setCellValueFactory(new PropertyValueFactory<ReadersTable, String>("last_name"));
-            year_of_birth.setCellValueFactory(new PropertyValueFactory<ReadersTable, Date>("year_of_birth"));
-            date_of_signing_in.setCellValueFactory(new PropertyValueFactory<ReadersTable, Date>("date_of_signing_in"));
-            number_of_borrowed_books.setCellValueFactory(new PropertyValueFactory<ReadersTable, Integer>("number_of_borrowed_books"));
-            mainTable.setItems(data);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        reload();
     }
 
     @FXML
@@ -91,5 +97,22 @@ public class ReadersController implements Initializable {
             }
         }
         mainTable.setItems(FXCollections.observableArrayList(filtered_data));
+    }
+
+    @Override
+    public void reload() {
+        try {
+            loadToArray();
+            data = FXCollections.observableArrayList(DatabaseConnection.getReadersTableArrayList());
+            id.setCellValueFactory(new PropertyValueFactory<ReadersTable, Integer>("id"));
+            first_name.setCellValueFactory(new PropertyValueFactory<ReadersTable, String>("first_name"));
+            last_name.setCellValueFactory(new PropertyValueFactory<ReadersTable, String>("last_name"));
+            year_of_birth.setCellValueFactory(new PropertyValueFactory<ReadersTable, Date>("year_of_birth"));
+            date_of_signing_in.setCellValueFactory(new PropertyValueFactory<ReadersTable, Date>("date_of_signing_in"));
+            number_of_borrowed_books.setCellValueFactory(new PropertyValueFactory<ReadersTable, Integer>("number_of_borrowed_books"));
+            mainTable.setItems(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

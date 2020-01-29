@@ -1,5 +1,5 @@
 package fxapp;
 
-public class Controller {
-    public void reload() {}
+public abstract class Controller {
+    public abstract void reload();
 }

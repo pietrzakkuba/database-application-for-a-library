@@ -28,7 +28,7 @@ import sql.tables.ShiftScheduleTable;
 
 import java.io.IOException;
 
-public class ShiftScheduleController implements Initializable {
+public class ShiftScheduleController extends Controller implements Initializable {
     public Button toMainMenuButton;
     public TableView<ShiftScheduleTable> mainTable;
     public TableColumn<ShiftScheduleTable, Integer> id;
@@ -40,25 +40,12 @@ public class ShiftScheduleController implements Initializable {
     public TableColumn<ShiftScheduleTable, Integer> number_of_shifts;
     public TextField filter_text_box;
 
-    private ObservableList<ShiftScheduleTable> data;
+    private static ObservableList<ShiftScheduleTable> data;
     private ArrayList<ShiftScheduleTable> filtered_data = new ArrayList<ShiftScheduleTable>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            DatabaseConnection.loadShiftSchedule();
-            data = FXCollections.observableArrayList(DatabaseConnection.getShiftScheduleTableArrayList());
-            id.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Integer>("id"));
-            is_valid.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Boolean>("is_valid"));
-            affiliate_name.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, String>("affiliate_name"));
-            schedule_name.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, String>("schedule_name"));
-            valid_from.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Date>("valid_from"));
-            valid_to.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Date>("valid_to"));
-            number_of_shifts.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Integer>("number_of_shifts"));
-            mainTable.setItems(data);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        reload();
     }
 
     public void toMainMenu(ActionEvent actionEvent) {
@@ -79,5 +66,27 @@ public class ShiftScheduleController implements Initializable {
             }
         }
         mainTable.setItems(FXCollections.observableArrayList(filtered_data));
+    }
+
+    public static void loadToArray() throws SQLException {
+        DatabaseConnection.loadShiftSchedule();
+        data = FXCollections.observableArrayList(DatabaseConnection.getShiftScheduleTableArrayList());
+    }
+
+        @Override
+    public void reload() {
+        try {
+            loadToArray();
+            id.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Integer>("id"));
+            is_valid.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Boolean>("is_valid"));
+            affiliate_name.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, String>("affiliate_name"));
+            schedule_name.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, String>("schedule_name"));
+            valid_from.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Date>("valid_from"));
+            valid_to.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Date>("valid_to"));
+            number_of_shifts.setCellValueFactory(new PropertyValueFactory<ShiftScheduleTable, Integer>("number_of_shifts"));
+            mainTable.setItems(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
