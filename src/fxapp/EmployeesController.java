@@ -23,9 +23,11 @@ import java.util.ResourceBundle;
 
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sql.DatabaseConnection;
 import sql.tables.AffiliatesTable;
+import sql.tables.CheckOutsTable;
 import sql.tables.CopiesTable;
 import sql.tables.EmployeesTable;
 
@@ -46,6 +48,7 @@ public class EmployeesController extends Controller implements Initializable {
     public TextField filter_text_box;
 
     private static ObservableList<EmployeesTable> data;
+    public Label expiration;
     private ArrayList<EmployeesTable> filtered_data = new ArrayList<EmployeesTable>();
 
     public static void loadToArray() throws SQLException {
@@ -190,5 +193,17 @@ public class EmployeesController extends Controller implements Initializable {
             }
         }
         mainTable.setItems(FXCollections.observableArrayList(filtered_data));
+    }
+
+    public void contractDate(MouseEvent mouseEvent) throws SQLException {
+        int row;
+        try {
+            row = mainTable.getSelectionModel().getSelectedCells().get(0).getRow();
+        }catch (IndexOutOfBoundsException e){
+            return;
+        }
+        EmployeesTable item = mainTable.getItems().get(row);
+        DatabaseConnection.timeTillExp(item.getDate_of_contract_expiration());
+
     }
 }

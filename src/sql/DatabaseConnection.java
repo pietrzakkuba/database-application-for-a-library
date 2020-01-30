@@ -10,6 +10,7 @@ import fxapp.CopiesController;
 import fxapp.PositionsController;
 import fxapp.ReadersController;
 import fxapp.containers.*;
+import oracle.sql.DATE;
 import sql.tables.*;
 
 public class DatabaseConnection {
@@ -89,6 +90,13 @@ public class DatabaseConnection {
         PreparedStatement preparedStatement = connection.prepareStatement("call ZwrocEgzemplarz(?)");
         preparedStatement.setInt(1, copy_id);
         preparedStatement.execute();
+    }
+
+    public static Date timeTillExp(Date date) throws SQLException {
+//        PreparedStatement preparedStatement = connection.prepareStatement("? = call ZwrocEgzemplarz(?)");
+//        preparedStatement.setDate(2, date);
+//        preparedStatement.execute();
+        return null;
     }
 
     private static String insertStatement(String table, ArrayList<String> fields, ArrayList<String> values, ArrayList<Types> types){

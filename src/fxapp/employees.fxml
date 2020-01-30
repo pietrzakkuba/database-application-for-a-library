@@ -3,6 +3,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="954.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxapp.EmployeesController">
     <children>
@@ -12,7 +13,7 @@
                 <String fx:value="back-button" />
                 <String fx:value="back-button" />
             </styleClass></Button>
-        <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" prefHeight="394.0" prefWidth="904.0">
+        <TableView fx:id="mainTable" layoutX="22.0" layoutY="113.0" onMouseClicked="#contractDate" prefHeight="394.0" prefWidth="904.0">
             <columns>
                 <TableColumn fx:id="id" prefWidth="38.0" text="ID" />
                 <TableColumn fx:id="first_name" prefWidth="87.0" text="First name" />
@@ -44,5 +45,10 @@
                 <TextField fx:id="filter_text_box" onKeyReleased="#filtering" GridPane.columnIndex="4" />
             </children>
         </GridPane>
+      <Label fx:id="expiration" layoutX="707.0" layoutY="518.0" text="Days till contract expiration: ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
