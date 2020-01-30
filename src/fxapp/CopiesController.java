@@ -202,11 +202,9 @@ public class CopiesController extends Controller implements Initializable {
             return;
         }
         CopiesTable item = mainTable.getItems().get(row);
-//        if (!item.isAvailability()) {
+        if (!item.isAvailability()) {
             DatabaseConnection.returnCopy(item.getCopy_id());
             reload();
-//        }
-
-
+        }
     }
 }

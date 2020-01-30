@@ -43,5 +43,6 @@
                 <TextField fx:id="filter_text_box" onKeyReleased="#filtering" GridPane.columnIndex="4" />
             </children>
         </GridPane>
+        <Button fx:id="returnCopyButton" layoutX="857.0" layoutY="507.0" mnemonicParsing="false" onAction="#returnCopy" text="Return" />
     </children>
 </AnchorPane>
