@@ -94,8 +94,8 @@ public class SectionsController extends Controller implements Initializable {
         SectionsTable item = mainTable.getItems().get(row);
 
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("Section name", true, item.getSection_name()));
-        parameters.add(new TextFieldParameter("Short name", true, item.getSection_short_name()));
+        parameters.add(new TextFieldParameter("Section name", true, item.getSection_name(),30));
+        parameters.add(new TextFieldParameter("Short name", true, item.getSection_short_name(),5));
         parameters.add(new TextFieldWithChoiceParameter("Affiliate", true, AffiliatesController::getMatchingRecords,item.getAffiliate_id() + " " + item.getAffiliate_name(), item.getAffiliate_id()));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
@@ -111,8 +111,8 @@ public class SectionsController extends Controller implements Initializable {
     @FXML
     void add(ActionEvent event) {
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("Section name", true));
-        parameters.add(new TextFieldParameter("Short name", true));
+        parameters.add(new TextFieldParameter("Section name", true, 30));
+        parameters.add(new TextFieldParameter("Short name", true,5));
         parameters.add(new TextFieldWithChoiceParameter("Affiliate", true, AffiliatesController::getMatchingRecords));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();

@@ -138,12 +138,11 @@ public class CopiesController extends Controller implements Initializable {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new TextFieldWithChoiceParameter("Book",true, BooksController::getMatchingRecords, item.getBook_title(), item.getBook_id()));
         parameters.add(new TextFieldWithChoiceParameter("Section and Affiliate",true, SectionsController::getMatchingRecords, item.getSection() + ", " + item.getAffiliate(), item.getSection_id()));
-        parameters.add(new TextFieldParameter("Availability", true, String.valueOf(item.isAvailability())));
         parameters.add(new TextFieldParameter("Cover's type",false, item.getType_of_cover()));
         parameters.add(new DateParameter("Release year",false, item.getRelease_year()));
         parameters.add(new TextFieldParameter("Release number",false, Integer.toString(item.getRelease_number())));
 
-        ((TextFieldParameter)parameters.get(5)).markAsInteger();
+        ((TextFieldParameter)parameters.get(4)).markAsInteger();
 
         try {
             AddElement.startModifying(item.getCopy_id(),this,currentWindow, parameters, DatabaseConnection::modifyCopy,"Modify copy");
@@ -168,7 +167,6 @@ public class CopiesController extends Controller implements Initializable {
 
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new LabelParameter("Book", item.getBook_title()));
-        parameters.add(new LabelParameter("Availability", String.valueOf(item.isAvailability())));
         parameters.add(new LabelParameter("Cover's type", item.getType_of_cover()));
         parameters.add(new LabelParameter("Section and Affiliate", item.getSection() + ", " + item.getAffiliate()));
         parameters.add(new LabelParameter("Release year", item.getRelease_year()));

@@ -96,7 +96,6 @@ public class CheckOutsController extends Controller implements Initializable {
         parameters.add(new TextFieldWithChoiceParameter("Reader", true, ReadersController::getMatchingRecords, item.getReader_id() + " " + item.getReader_first_name() + " " + item.getReader_last_name() ,item.getReader_id()));
         parameters.add(new DateParameter("Date of checkout", true, item.getCheck_out_date()));
         parameters.add(new TextFieldParameter("Rented for", true, Integer.toString(item.getCheck_out_period())));
-        parameters.add(new DateParameter("Date of return", false, item.getReturn_date()));
 
         ((TextFieldParameter)parameters.get(3)).markAsInteger();
 
@@ -117,7 +116,6 @@ public class CheckOutsController extends Controller implements Initializable {
         parameters.add(new TextFieldWithChoiceParameter("Reader", true, ReadersController::getMatchingRecords));
         parameters.add(new DateParameter("Date of checkout", true));
         parameters.add(new TextFieldParameter("Rented for", true));
-        parameters.add(new DateParameter("Date of return", false));
 
         ((TextFieldParameter)parameters.get(3)).markAsInteger();
 
@@ -142,6 +140,9 @@ public class CheckOutsController extends Controller implements Initializable {
         int row = pos.getRow();
 
         CheckOutsTable item = mainTable.getItems().get(row);
+
+        if(item.getReturn_date() == null)
+            return;
 
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new LabelParameter("Copy of book", item.getCopy_id() + " " + item.getBook_title()));
@@ -187,7 +188,6 @@ public class CheckOutsController extends Controller implements Initializable {
             return;
         }
         CheckOutsTable item = mainTable.getItems().get(row);
-        System.out.println(item.getCopy_id());
         DatabaseConnection.returnCopy(item.getCopy_id());
         reload();
     }

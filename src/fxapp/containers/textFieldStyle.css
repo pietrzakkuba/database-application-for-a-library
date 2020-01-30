@@ -1,0 +1,9 @@
+.time-field {
+    -fx-control-inner-background: #ffd16e;
+}
+.integer-field {
+    -fx-control-inner-background: #add8e6;
+}
+.double-field {
+    -fx-control-inner-background: #a1ff91;
+}

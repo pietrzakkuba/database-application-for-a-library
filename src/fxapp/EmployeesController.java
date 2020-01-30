@@ -200,10 +200,10 @@ public class EmployeesController extends Controller implements Initializable {
         try {
             row = mainTable.getSelectionModel().getSelectedCells().get(0).getRow();
         }catch (IndexOutOfBoundsException e){
+            expiration.setText("Days till contract expiration: ");
             return;
         }
         EmployeesTable item = mainTable.getItems().get(row);
-        DatabaseConnection.timeTillExp(item.getDate_of_contract_expiration());
-
+        expiration.setText("Days till contract expiration: " + DatabaseConnection.timeTillExp(item.getDate_of_contract_expiration()));
     }
 }

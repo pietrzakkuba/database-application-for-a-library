@@ -23,6 +23,7 @@ public class TextFieldParameter extends Parameter {
 
     public void markAsTime(){
         isTime = true;
+        //((TextField)valueField).getStylesheets().add(getClass().getResource("textFieldParameter.css").toExternalForm());
         valueField.getStyleClass().add("time-field");
         addTextLimiter((TextField)valueField,5);
     }

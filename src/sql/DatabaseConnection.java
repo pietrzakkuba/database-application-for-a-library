@@ -92,11 +92,12 @@ public class DatabaseConnection {
         preparedStatement.execute();
     }
 
-    public static Date timeTillExp(Date date) throws SQLException {
-//        PreparedStatement preparedStatement = connection.prepareStatement("? = call ZwrocEgzemplarz(?)");
-//        preparedStatement.setDate(2, date);
-//        preparedStatement.execute();
-        return null;
+    public static int timeTillExp(Date date) throws SQLException {
+        CallableStatement preparedStatement = connection.prepareCall("{? = call dokoncaumowydni(?)}");
+        preparedStatement.registerOutParameter(1, java.sql.Types.INTEGER);
+        preparedStatement.setDate(2,date);
+        preparedStatement.execute();
+        return preparedStatement.getInt(1);
     }
 
     private static String insertStatement(String table, ArrayList<String> fields, ArrayList<String> values, ArrayList<Types> types){
@@ -318,9 +319,9 @@ public class DatabaseConnection {
 
     public static String addCopy(String[] values){
         String BookID = values[0],  SectionID = values[1], CoversType = values[2], ReleaseYear = values[3], RealaseNumber = values[4];
-        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu"));
-        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value));
-        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID));
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu","dostepnosc"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID,"1"));
         if(!(CoversType.equals("null") || CoversType.equals(""))){
             fitFields.add("rodzaj_okladki");
             fitValues.add(CoversType);
@@ -343,15 +344,10 @@ public class DatabaseConnection {
     public static String modifyCopy(String[] values){
         String id = values[0];
         values = Arrays.copyOfRange(values, 1, values.length);
-        String BookID = values[0], SectionID = values[1], isAvailable = values[2], CoversType = values[3], ReleaseYear = values[4], RealaseNumber = values[5];
-        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu","dostepnosc"));
-        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.value));
-        if(isAvailable.equals("true")){
-            isAvailable = "1";
-        }else{
-            isAvailable = "0";
-        }
-        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID,isAvailable));
+        String BookID = values[0], SectionID = values[1], CoversType = values[2], ReleaseYear = values[3], RealaseNumber = values[4];
+        ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_ksiazki","id_dzialu"));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value));
+        ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(BookID,SectionID));
         if(!(CoversType.equals("null") || CoversType.equals(""))){
             fitFields.add("rodzaj_okladki");
             fitValues.add(CoversType);
@@ -376,30 +372,46 @@ public class DatabaseConnection {
     }
 
     public static String addCheckout(String[] values){
-        String Copy_ID = values[0],  Reader_ID = values[1], Date_of_checkout = values[2], Rented_for = values[3], Date_of_return = values[4];
+        String Copy_ID = values[0],  Reader_ID = values[1], Date_of_checkout = values[2], Rented_for = values[3];
         ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_egzemplarza","id_czytelnika","data_wypozyczenia", "termin_zwrotu"));
         ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.date,Types.value));
         ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(Copy_ID,Reader_ID,Date_of_checkout,Rented_for));
-        if(!(Date_of_return.equals("null") || Date_of_return.equals(""))){
-            fitFields.add("data_zwrotu");
-            fitValues.add(Date_of_return);
-            fitTypes.add(Types.date);
+
+        String query =  "insert into " + "Wypozyczenia" + " (";
+        for(int i=0; i<fitFields.size(); i++){
+            query += fitFields.get(i) + ",";
         }
-        return insertStatement("Wypozyczenia",fitFields,fitValues,fitTypes);
+        query = query.substring(0,query.length()-1);
+        query += ") values (";
+
+        for(int i=0; i<fitValues.size(); i++){
+            query = decorateString(fitValues, (ArrayList<Types>) fitTypes, query, i, ",");
+        }
+
+        int result = 0;
+        try {
+            CallableStatement stmt = connection.prepareCall("{? = call checkifavailable(?)}");
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmt.setInt(2,Integer.parseInt(Copy_ID.trim()));
+            stmt.execute();
+            result = stmt.getInt(1);
+        } catch (SQLException ignore) {
+        }
+        if(result == 1){
+            return insertStatement("Wypozyczenia",fitFields,fitValues,fitTypes);
+        }else{
+            return "This copy is unavailable";
+        }
     }
 
     public static String modifyCheckout(String[] values){
         String id = values[0];
         values = Arrays.copyOfRange(values, 1, values.length);
-        String Copy_ID = values[0],  Reader_ID = values[1], Date_of_checkout = values[2], Rented_for = values[3], Date_of_return = values[4];
+        String Copy_ID = values[0],  Reader_ID = values[1], Date_of_checkout = values[2], Rented_for = values[3];
         ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("id_egzemplarza","id_czytelnika","data_wypozyczenia", "termin_zwrotu"));
         ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.value,Types.value,Types.date,Types.value));
         ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(Copy_ID,Reader_ID,Date_of_checkout,Rented_for));
-        if(!(Date_of_return.equals("null") || Date_of_return.equals(""))){
-            fitFields.add("data_zwrotu");
-            fitValues.add(Date_of_return);
-            fitTypes.add(Types.date);
-        }
+
         return updateStatement("Wypozyczenia",fitFields,fitValues,fitTypes,"id_wypozyczenia",id);
     }
 
