@@ -109,6 +109,8 @@ public class CopiesController extends Controller implements Initializable {
         parameters.add(new DateParameter("Release year",false, null));
         parameters.add(new TextFieldParameter("Release number",false, ""));
 
+        ((TextFieldParameter)parameters.get(4)).markAsInteger();
+
         try {
             AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addCopy,"Add copy");
         } catch (IOException e) {
@@ -140,6 +142,8 @@ public class CopiesController extends Controller implements Initializable {
         parameters.add(new TextFieldParameter("Cover's type",false, item.getType_of_cover()));
         parameters.add(new DateParameter("Release year",false, item.getRelease_year()));
         parameters.add(new TextFieldParameter("Release number",false, Integer.toString(item.getRelease_number())));
+
+        ((TextFieldParameter)parameters.get(5)).markAsInteger();
 
         try {
             AddElement.startModifying(item.getCopy_id(),this,currentWindow, parameters, DatabaseConnection::modifyCopy,"Modify copy");

@@ -94,7 +94,7 @@ public class BooksController extends Controller implements Initializable {
         BooksTable item = mainTable.getItems().get(row);
 
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("Title", true, item.getTitle()));
+        parameters.add(new TextFieldParameter("Title", true, item.getTitle(),100));
         parameters.add(new TextFieldWithChoiceParameter("Author", true, AuthorsController::getMatchingRecords, item.getAuthor_first_name() + " " + item.getAuthor_last_name(), item.getAuthor_id()));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
@@ -110,7 +110,7 @@ public class BooksController extends Controller implements Initializable {
     @FXML
     void add(ActionEvent event) {
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("Title", true));
+        parameters.add(new TextFieldParameter("Title", true, 100));
         parameters.add(new TextFieldWithChoiceParameter("Author", true, AuthorsController::getMatchingRecords));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();

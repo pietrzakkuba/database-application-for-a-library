@@ -1,24 +1,19 @@
 package fxapp.editWindows;
 
 import fxapp.Controller;
-import fxapp.containers.Parameter;
-import fxapp.containers.TextFieldParameter;
-import fxapp.containers.TextFieldWithChoiceParameter;
+import fxapp.containers.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class AddElement {
@@ -75,13 +70,7 @@ public class AddElement {
         return (Stage)editFields.getScene().getWindow();
     }
 
-    class requiredParameterException extends Exception{
-        public requiredParameterException(String paramName) {
-            super("Parameter \"" + paramName + "\" is required");
-        }
-    }
-
-    private String[] getValuesToModify() throws requiredParameterException {
+    private String[] getValuesToModify() throws wrongParameterException {
         String[] values = new String[parameters.size()+1];
         values[0] = Integer.toString(recordsID);
         for(int i=1; i<values.length; i++){
@@ -94,7 +83,7 @@ public class AddElement {
         return values;
     }
 
-    private String[] getValuesToAdd() throws requiredParameterException {
+    private String[] getValuesToAdd() throws wrongParameterException {
         String[] values = new String[parameters.size()];
         for(int i=0; i<values.length; i++){
             Parameter parameter = parameters.get(i);
@@ -118,7 +107,7 @@ public class AddElement {
             }else {
                 errorMessage = methodPasser.exec(getValuesToModify());
             }
-        }catch (requiredParameterException e) {
+        }catch (wrongParameterException e) {
             errorDisplay.setString(e.getMessage());
             errorDisplay.displayErrorMessage();
             return;
@@ -152,6 +141,9 @@ public class AddElement {
     public void setEditFields(ArrayList <Parameter> parameters){
         editFields.getChildren().removeAll();
         for(int i=0; i<parameters.size(); i++){
+            if(parameters.get(i).isRequired()){
+                parameters.get(i).getName().setText("*"+parameters.get(i).getName().getText());
+            }
             editFields.add(parameters.get(i).getName(),0,i);
             editFields.add(parameters.get(i).getValueField(),1,i);
             if(parameters.get(i).getType() == Parameter.Type.textFieldWithChoice){

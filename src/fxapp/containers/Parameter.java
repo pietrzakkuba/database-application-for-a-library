@@ -40,6 +40,6 @@ public abstract class Parameter {
         return valueField;
     }
 
-    public abstract String valueToString();
+    public abstract String valueToString() throws wrongParameterException;
 
 }

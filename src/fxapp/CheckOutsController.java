@@ -96,6 +96,8 @@ public class CheckOutsController extends Controller implements Initializable {
         parameters.add(new TextFieldParameter("Rented for", true, Integer.toString(item.getCheck_out_period())));
         parameters.add(new DateParameter("Date of return", false, item.getReturn_date()));
 
+        ((TextFieldParameter)parameters.get(3)).markAsInteger();
+
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
         try {
@@ -114,6 +116,8 @@ public class CheckOutsController extends Controller implements Initializable {
         parameters.add(new DateParameter("Date of checkout", true));
         parameters.add(new TextFieldParameter("Rented for", true));
         parameters.add(new DateParameter("Date of return", false));
+
+        ((TextFieldParameter)parameters.get(3)).markAsInteger();
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 

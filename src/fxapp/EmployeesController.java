@@ -93,6 +93,8 @@ public class EmployeesController extends Controller implements Initializable {
         parameters.add(new DateParameter("Date of signing contract",true));
         parameters.add(new DateParameter("Date of contract expiration",false));
 
+        ((TextFieldParameter)parameters.get(5)).markAsDouble();
+
         try {
             AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addEmployee,"Add employee");
         } catch (IOException e) {
@@ -126,6 +128,8 @@ public class EmployeesController extends Controller implements Initializable {
         parameters.add(new TextFieldParameter("Hourly rate",true, Double.toString(item.getHourly_rate())));
         parameters.add(new DateParameter("Date of signing contract",true, item.getDate_of_signing_contract()));
         parameters.add(new DateParameter("Date of contract expiration",false, item.getDate_of_contract_expiration()));
+
+        ((TextFieldParameter)parameters.get(5)).markAsDouble();
 
         try {
             AddElement.startModifying(item.getId(),this,currentWindow, parameters, DatabaseConnection::modifyEmployee,"Modify employee");

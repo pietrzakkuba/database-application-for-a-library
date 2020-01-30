@@ -98,10 +98,10 @@ public class AuthorsController extends Controller implements Initializable {
         AuthorsTable item = mainTable.getItems().get(row);
 
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("First name", true, item.getFirst_name()));
-        parameters.add(new TextFieldParameter("Last name", true, item.getLast_name()));
+        parameters.add(new TextFieldParameter("First name", true, item.getFirst_name(),20));
+        parameters.add(new TextFieldParameter("Last name", true, item.getLast_name(),20));
         parameters.add(new TextFieldParameter("Pseudonym", false, item.getPseudonym()));
-        parameters.add(new TextFieldParameter("Nationality", false, item.getNationality()));
+        parameters.add(new TextFieldParameter("Nationality", false, item.getNationality(),20));
         parameters.add(new DateParameter("Date of birth", false, item.getDate_of_birth()));
         parameters.add(new DateParameter("Date of death", false, item.getDate_of_death()));
 
@@ -118,10 +118,10 @@ public class AuthorsController extends Controller implements Initializable {
     @FXML
     void add(ActionEvent event) {
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("First name", true));
-        parameters.add(new TextFieldParameter("Last name", true ));
+        parameters.add(new TextFieldParameter("First name", true,20));
+        parameters.add(new TextFieldParameter("Last name", true ,20));
         parameters.add(new TextFieldParameter("Pseudonym", false));
-        parameters.add(new TextFieldParameter("Nationality", false));
+        parameters.add(new TextFieldParameter("Nationality", false,20));
         parameters.add(new DateParameter("Date of birth", false));
         parameters.add(new DateParameter("Date of death", false));
 

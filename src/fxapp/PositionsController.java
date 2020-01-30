@@ -62,7 +62,9 @@ public class PositionsController extends Controller implements Initializable {
 
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new TextFieldParameter("Name", true, item.getName()));
-        parameters.add(new TextFieldParameter("Reader", true, Double.toString(item.getMinimal_hourly_rate())));
+        parameters.add(new TextFieldParameter("Minimum hourly rate", true, Double.toString(item.getMinimal_hourly_rate())));
+
+        ((TextFieldParameter)parameters.get(1)).markAsDouble();
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
@@ -78,7 +80,9 @@ public class PositionsController extends Controller implements Initializable {
     void add(ActionEvent event) {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new TextFieldParameter("Name", true));
-        parameters.add(new TextFieldParameter("Reader", true));
+        parameters.add(new TextFieldParameter("Minimum hourly rate", false));
+
+        ((TextFieldParameter)parameters.get(1)).markAsDouble();
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
@@ -104,7 +108,7 @@ public class PositionsController extends Controller implements Initializable {
 
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new TextFieldParameter("Name", true));
-        parameters.add(new TextFieldParameter("Reader", true));
+        parameters.add(new TextFieldParameter("Minimum hourly rate", false));
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
         try {

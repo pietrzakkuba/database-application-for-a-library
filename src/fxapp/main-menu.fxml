@@ -26,8 +26,8 @@
             <Button fx:id="copiesButton" mnemonicParsing="false" onAction="#toCopies" prefHeight="300.0" prefWidth="300.0" text="Copies" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button fx:id="sectionsButton" mnemonicParsing="false" onAction="#toSections" prefHeight="300.0" prefWidth="300.0" text="Sections" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Button fx:id="affiliatesButton" mnemonicParsing="false" onAction="#toAffiliates" prefHeight="300.0" prefWidth="300.0" text="Affiliates" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <Button fx:id="employeesButton" mnemonicParsing="false" onAction="#toEmployees" prefHeight="300.0" prefWidth="300.0" text="Employees" GridPane.rowIndex="2" />
-            <Button fx:id="positionsButton" mnemonicParsing="false" onAction="#toPositions" prefHeight="300.0" prefWidth="300.0" text="Positions" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="employeesButton" mnemonicParsing="false" onAction="#toEmployees" prefHeight="300.0" prefWidth="300.0" text="Employees" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="positionsButton" mnemonicParsing="false" onAction="#toPositions" prefHeight="300.0" prefWidth="300.0" text="Positions" GridPane.columnIndex="2" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" prefHeight="17.0" prefWidth="954.0" styleClass="our-library-label" text="Our Library" />

@@ -162,6 +162,9 @@ public class DatabaseConnection {
             Statement statement = connection.createStatement();
             statement.executeQuery(query);
         } catch (SQLException e) {
+            if(e.getErrorCode() == 2292){//naruszenie więzów spójności
+                return "You cannot delete this object - other objects depend on it";
+            }
             return "Fatal error occurs...";
         }
         return null;
@@ -197,39 +200,8 @@ public class DatabaseConnection {
     }
 
     public static String addAffiliates(String[] values){
-        String address = values[0], open_hour = values[1], close_hour = values[2];
-
-        int from, to;
-        if(address.equals("")){
-            return "Address can't be empty";
-        }
-        try
-        {
-            from = Integer.parseInt(open_hour.trim());
-            if(from>24){
-                throw new NumberFormatException();
-            }
-        }
-        catch (NumberFormatException nfe)
-        {
-            return "Incorrect \"Opened from\" value";
-        }
-        try
-        {
-            to = Integer.parseInt(close_hour.trim());
-            if(to>24){
-                throw new NumberFormatException();
-            }
-        }
-        catch (NumberFormatException nfe)
-        {
-            return "Incorrect \"Opened from\" value";
-        }
-        if(from>=to){
-            return "Work time must be positive number";
-        }
         ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("adres","godziny_pracy_od","godziny_pracy_do"));
-        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value,Types.value));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.string));
         ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(values));
         return insertStatement("FILIE", fitFields, fitValues, fitTypes);
     }
@@ -237,39 +209,8 @@ public class DatabaseConnection {
     public static String modifyAffiliates(String[] values){
         String id = values[0];
         values = Arrays.copyOfRange(values, 1, values.length);
-        String address = values[0], open_hour = values[1], close_hour = values[2];
-
-        int from, to;
-        if(address.equals("")){
-            return "Address can't be empty";
-        }
-        try
-        {
-            from = Integer.parseInt(open_hour.trim());
-            if(from>24){
-                throw new NumberFormatException();
-            }
-        }
-        catch (NumberFormatException nfe)
-        {
-            return "Incorrect \"Opened from\" value";
-        }
-        try
-        {
-            to = Integer.parseInt(close_hour.trim());
-            if(to>24){
-                throw new NumberFormatException();
-            }
-        }
-        catch (NumberFormatException nfe)
-        {
-            return "Incorrect \"Opened from\" value";
-        }
-        if(from>=to){
-            return "Work time must be positive number";
-        }
         ArrayList<String> fitFields = new ArrayList<>( Arrays.asList("adres","godziny_pracy_od","godziny_pracy_do"));
-        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.value,Types.value));
+        ArrayList<Types> fitTypes = new ArrayList<>( Arrays.asList(Types.string,Types.string,Types.string));
         ArrayList<String> fitValues = new ArrayList<>( Arrays.asList(values));
         return updateStatement("filie", fitFields, fitValues, fitTypes, "numer", id);
     }
@@ -609,7 +550,7 @@ public class DatabaseConnection {
         if (affiliatesTableArrayList.size() > 0) {
             affiliatesTableArrayList.clear();
         }
-        String query =  "select numer, adres, godziny_pracy_od, godziny_pracy_do, count(distinct j.id_pracownika) " +
+        String query =  "select numer, adres, godziny_pracy_od, godziny_pracy_do, count(distinct p.id) " +
                         "from filie f " +
                         "left join pracownicy p " +
                         "on p.ID_FILII = f.numer " +
@@ -621,8 +562,8 @@ public class DatabaseConnection {
                     new AffiliatesTable(
                             resultSet.getInt(1),
                             resultSet.getString(2),
-                            resultSet.getInt(3),
-                            resultSet.getInt(4),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
                             resultSet.getInt(5)
                     ));
 
@@ -749,7 +690,7 @@ public class DatabaseConnection {
                         "inner join filie f " +
                         "on f.numer = p.ID_FILII " +
                         "inner join STANOWISKA s " +
-                        "on p.ID = s.ID";
+                        "on p.ID_STANOWISKA = s.ID";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {

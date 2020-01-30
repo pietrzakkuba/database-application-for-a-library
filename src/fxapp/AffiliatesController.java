@@ -43,8 +43,8 @@ public class AffiliatesController extends Controller implements Initializable  {
     public TableView<AffiliatesTable> mainTable;
     public TableColumn<AffiliatesTable, Integer> id_number;
     public TableColumn<AffiliatesTable, String> address;
-    public TableColumn<AffiliatesTable, Integer> opening_hours_from;
-    public TableColumn<AffiliatesTable, Integer> opening_hours_to;
+    public TableColumn<AffiliatesTable, String> opening_hours_from;
+    public TableColumn<AffiliatesTable, String> opening_hours_to;
     public TableColumn<AffiliatesTable, Integer> number_of_employees;
     public TextField filter_text_box;
 
@@ -56,9 +56,12 @@ public class AffiliatesController extends Controller implements Initializable  {
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("Address",true, ""));
-        parameters.add(new TextFieldParameter("Opened from",true, ""));
-        parameters.add(new TextFieldParameter("Opened till",true, ""));
+        parameters.add(new TextFieldParameter("Address",true, 50));
+        parameters.add(new TextFieldParameter("Opened from",true));
+        parameters.add(new TextFieldParameter("Opened till",true));
+
+        ((TextFieldParameter)parameters.get(1)).markAsTime();
+        ((TextFieldParameter)parameters.get(2)).markAsTime();
         try {
             AddElement.startAdding(this,currentWindow, parameters, DatabaseConnection::addAffiliates,"Add affiliate");
         } catch (IOException e) {
@@ -83,8 +86,8 @@ public class AffiliatesController extends Controller implements Initializable  {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new LabelParameter("Number", Integer.toString(item.getId_number())));
         parameters.add(new LabelParameter("Address",item.getAddress()));
-        parameters.add(new LabelParameter("Opened from",Integer.toString(item.getOpening_hours_from())));
-        parameters.add(new LabelParameter("Opened till", Integer.toString(item.getOpening_hours_to())));
+        parameters.add(new LabelParameter("Opened from",item.getOpening_hours_from()));
+        parameters.add(new LabelParameter("Opened till", item.getOpening_hours_to()));
         parameters.add(new LabelParameter("Number of employees", Integer.toString(item.getNumber_of_employees())));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
@@ -110,9 +113,12 @@ public class AffiliatesController extends Controller implements Initializable  {
         // Item here is the table view type:
         AffiliatesTable item = mainTable.getItems().get(row);
         ArrayList<Parameter> parameters = new ArrayList<>();
-        parameters.add(new TextFieldParameter("Address",true, item.getAddress()));
-        parameters.add(new TextFieldParameter("Opened from",true, Integer.toString(item.getOpening_hours_from())));
-        parameters.add(new TextFieldParameter("Opened till",true, Integer.toString(item.getOpening_hours_to())));
+        parameters.add(new TextFieldParameter("Address",true, item.getAddress(), 50));
+        parameters.add(new TextFieldParameter("Opened from",true, item.getOpening_hours_from()));
+        parameters.add(new TextFieldParameter("Opened till",true, item.getOpening_hours_to()));
+
+        ((TextFieldParameter)parameters.get(1)).markAsTime();
+        ((TextFieldParameter)parameters.get(2)).markAsTime();
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
         try {
@@ -146,8 +152,8 @@ public class AffiliatesController extends Controller implements Initializable  {
             loadToArray();
             id_number.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("id_number"));
             address.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, String>("address"));
-            opening_hours_from.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("opening_hours_from"));
-            opening_hours_to.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("opening_hours_to"));
+            opening_hours_from.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, String>("opening_hours_from"));
+            opening_hours_to.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, String>("opening_hours_to"));
             number_of_employees.setCellValueFactory(new PropertyValueFactory<AffiliatesTable, Integer>("number_of_employees"));
             mainTable.setItems(data);
         } catch (SQLException e) {

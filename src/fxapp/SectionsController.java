@@ -50,6 +50,7 @@ public class SectionsController extends Controller implements Initializable {
     public void reload() {
         try{
         loadToArray();
+        AffiliatesController.loadToArray();
         section_id.setCellValueFactory(new PropertyValueFactory<SectionsTable, Integer>("section_id"));
         section_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("section_name"));
         section_short_name.setCellValueFactory(new PropertyValueFactory<SectionsTable, String>("section_short_name"));
@@ -95,7 +96,7 @@ public class SectionsController extends Controller implements Initializable {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new TextFieldParameter("Section name", true, item.getSection_name()));
         parameters.add(new TextFieldParameter("Short name", true, item.getSection_short_name()));
-        parameters.add(new TextFieldWithChoiceParameter("Filia", true, AffiliatesController::getMatchingRecords,item.getAffiliate_id() + " " + item.getAffiliate_name(),item.getAffiliate_id()));
+        parameters.add(new TextFieldWithChoiceParameter("Affiliate", true, AffiliatesController::getMatchingRecords,item.getAffiliate_id() + " " + item.getAffiliate_name(), item.getAffiliate_id()));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
@@ -112,7 +113,7 @@ public class SectionsController extends Controller implements Initializable {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new TextFieldParameter("Section name", true));
         parameters.add(new TextFieldParameter("Short name", true));
-        parameters.add(new TextFieldWithChoiceParameter("Filia", true, AffiliatesController::getMatchingRecords));
+        parameters.add(new TextFieldWithChoiceParameter("Affiliate", true, AffiliatesController::getMatchingRecords));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
@@ -139,7 +140,7 @@ public class SectionsController extends Controller implements Initializable {
         ArrayList<Parameter> parameters = new ArrayList<>();
         parameters.add(new LabelParameter("Section name", item.getSection_name()));
         parameters.add(new LabelParameter("Short name", item.getSection_short_name()));
-        parameters.add(new LabelParameter("Filia",item.getAffiliate_id() + " " + item.getAffiliate_name()));
+        parameters.add(new LabelParameter("Affiliate",item.getAffiliate_id() + " " + item.getAffiliate_name()));
 
         Stage currentWindow = (Stage) ((Node)(event.getSource())).getScene().getWindow();
 
